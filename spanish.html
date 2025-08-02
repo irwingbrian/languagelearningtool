@@ -392,8 +392,6 @@
         // Generate full conjugation for a verb
         function generateConjugation(verb, type) {
             if (type === 'irregular') {
-                // For irregular verbs, we'd need user input or a database
-                // For now, return a placeholder
                 return {
                     'yo': `${verb}*`, 'tú': `${verb}*`, 'él': `${verb}*`, 'ella': `${verb}*`,
                     'nosotros': `${verb}*`, 'vosotros': `${verb}*`, 'ellos': `${verb}*`, 'ellas': `${verb}*`
@@ -412,84 +410,36 @@
 
         const conjugations = {
             'hablar': {
-                'yo': 'hablo',
-                'tú': 'hablas',
-                'él': 'habla',
-                'ella': 'habla',
-                'nosotros': 'hablamos',
-                'vosotros': 'habláis',
-                'ellos': 'hablan',
-                'ellas': 'hablan'
+                'yo': 'hablo', 'tú': 'hablas', 'él': 'habla', 'ella': 'habla',
+                'nosotros': 'hablamos', 'vosotros': 'habláis', 'ellos': 'hablan', 'ellas': 'hablan'
             },
             'comer': {
-                'yo': 'como',
-                'tú': 'comes',
-                'él': 'come',
-                'ella': 'come',
-                'nosotros': 'comemos',
-                'vosotros': 'coméis',
-                'ellos': 'comen',
-                'ellas': 'comen'
+                'yo': 'como', 'tú': 'comes', 'él': 'come', 'ella': 'come',
+                'nosotros': 'comemos', 'vosotros': 'coméis', 'ellos': 'comen', 'ellas': 'comen'
             },
             'vivir': {
-                'yo': 'vivo',
-                'tú': 'vives',
-                'él': 'vive',
-                'ella': 'vive',
-                'nosotros': 'vivimos',
-                'vosotros': 'vivís',
-                'ellos': 'viven',
-                'ellas': 'viven'
+                'yo': 'vivo', 'tú': 'vives', 'él': 'vive', 'ella': 'vive',
+                'nosotros': 'vivimos', 'vosotros': 'vivís', 'ellos': 'viven', 'ellas': 'viven'
             },
             'estudiar': {
-                'yo': 'estudio',
-                'tú': 'estudias',
-                'él': 'estudia',
-                'ella': 'estudia',
-                'nosotros': 'estudiamos',
-                'vosotros': 'estudiáis',
-                'ellos': 'estudian',
-                'ellas': 'estudian'
+                'yo': 'estudio', 'tú': 'estudias', 'él': 'estudia', 'ella': 'estudia',
+                'nosotros': 'estudiamos', 'vosotros': 'estudiáis', 'ellos': 'estudian', 'ellas': 'estudian'
             },
             'trabajar': {
-                'yo': 'trabajo',
-                'tú': 'trabajas',
-                'él': 'trabaja',
-                'ella': 'trabaja',
-                'nosotros': 'trabajamos',
-                'vosotros': 'trabajáis',
-                'ellos': 'trabajan',
-                'ellas': 'trabajan'
+                'yo': 'trabajo', 'tú': 'trabajas', 'él': 'trabaja', 'ella': 'trabaja',
+                'nosotros': 'trabajamos', 'vosotros': 'trabajáis', 'ellos': 'trabajan', 'ellas': 'trabajan'
             },
             'beber': {
-                'yo': 'bebo',
-                'tú': 'bebes',
-                'él': 'bebe',
-                'ella': 'bebe',
-                'nosotros': 'bebemos',
-                'vosotros': 'bebéis',
-                'ellos': 'beben',
-                'ellas': 'beben'
+                'yo': 'bebo', 'tú': 'bebes', 'él': 'bebe', 'ella': 'bebe',
+                'nosotros': 'bebemos', 'vosotros': 'bebéis', 'ellos': 'beben', 'ellas': 'beben'
             },
             'escribir': {
-                'yo': 'escribo',
-                'tú': 'escribes',
-                'él': 'escribe',
-                'ella': 'escribe',
-                'nosotros': 'escribimos',
-                'vosotros': 'escribís',
-                'ellos': 'escriben',
-                'ellas': 'escriben'
+                'yo': 'escribo', 'tú': 'escribes', 'él': 'escribe', 'ella': 'escribe',
+                'nosotros': 'escribimos', 'vosotros': 'escribís', 'ellos': 'escriben', 'ellas': 'escriben'
             },
             'leer': {
-                'yo': 'leo',
-                'tú': 'lees',
-                'él': 'lee',
-                'ella': 'lee',
-                'nosotros': 'leemos',
-                'vosotros': 'leéis',
-                'ellos': 'leen',
-                'ellas': 'leen'
+                'yo': 'leo', 'tú': 'lees', 'él': 'lee', 'ella': 'lee',
+                'nosotros': 'leemos', 'vosotros': 'leéis', 'ellos': 'leen', 'ellas': 'leen'
             }
         };
 
@@ -530,122 +480,7 @@
                 button.className = 'word-button verb';
                 button.textContent = verbData.verb;
                 button.onclick = () => selectVerb(verbData.verb);
-                button.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)'; // Green gradient for custom
-                verbGrid.appendChild(button);
-            });
-        }
-
-        function toggleVocabSection() {
-            const section = document.getElementById('vocabSection');
-            section.classList.toggle('hidden');
-        }
-
-        function addNewVerb() {
-            const verbInput = document.getElementById('newVerb');
-            const typeSelect = document.getElementById('verbType');
-            
-            const verb = verbInput.value.trim().toLowerCase();
-            const type = typeSelect.value;
-            
-            if (!verb) {
-                alert('Por favor, introduce un verbo');
-                return;
-            }
-            
-            // Check if verb already exists
-            if (conjugations[verb] || customVerbs.some(v => v.verb === verb)) {
-                alert('Este verbo ya existe');
-                return;
-            }
-            
-            // Validate verb ending
-            const validEndings = {
-                'regular-ar': 'ar',
-                'regular-er': 'er', 
-                'regular-ir': 'ir'
-            };
-            
-            if (type !== 'irregular' && !verb.endsWith(validEndings[type])) {
-                alert(`Los verbos ${type} deben terminar en -${validEndings[type]}`);
-                return;
-            }
-            
-            // Generate conjugation and add to system
-            const newConjugation = generateConjugation(verb, type);
-            conjugations[verb] = newConjugation;
-            
-            // Add to custom verbs list
-            customVerbs.push({ verb, type });
-            
-            // Update UI
-            updateVerbGrid();
-            updateCustomVerbsDisplay();
-            
-            // Clear form
-            verbInput.value = '';
-            typeSelect.value = 'regular-ar';
-            
-            alert(`¡Verbo "${verb}" añadido correctamente!`);
-        }
-
-        function updateCustomVerbsDisplay() {
-            const container = document.getElementById('customVerbs');
-            const title = container.querySelector('div');
-            
-            // Clear existing tags
-            container.innerHTML = '';
-            container.appendChild(title);
-            
-            customVerbs.forEach((verbData, index) => {
-                const tag = document.createElement('span');
-                tag.className = 'custom-verb-tag';
-                tag.innerHTML = `${verbData.verb} (${verbData.type}) <span class="remove-verb" onclick="removeCustomVerb(${index})">×</span>`;
-                container.appendChild(tag);
-            });
-        }
-
-        function removeCustomVerb(index) {
-            const verbData = customVerbs[index];
-            
-            // Remove from conjugations
-            delete conjugations[verbData.verb];
-            
-            // Remove from custom verbs
-            customVerbs.splice(index, 1);
-            
-            // Update UI
-            updateVerbGrid();
-            updateCustomVerbsDisplay();
-            
-            // Clear selection if it was the removed verb
-            if (selectedVerb === verbData.verb) {
-                selectedVerb = null;
-                updateSentence();
-            }
-        }
-        function updateVerbGrid() {
-            const verbGrid = document.querySelector('.section:nth-child(2) .word-grid');
-            
-            // Clear existing verbs
-            verbGrid.innerHTML = '';
-            
-            // Add default verbs
-            const defaultVerbs = ['hablar', 'comer', 'vivir', 'estudiar', 'trabajar', 'beber', 'escribir', 'leer'];
-            defaultVerbs.forEach(verb => {
-                const button = document.createElement('button');
-                button.className = 'word-button verb';
-                button.textContent = verb;
-                button.onclick = () => selectVerb(verb);
-                verbGrid.appendChild(button);
-            });
-            
-            // Add custom verbs
-            customVerbs.forEach(verbData => {
-                const button = document.createElement('button');
-                button.className = 'word-button verb';
-                button.textContent = verbData.verb;
-                button.onclick = () => selectVerb(verbData.verb);
-                button.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)'; // Green gradient for custom
+                button.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)';
                 verbGrid.appendChild(button);
             });
         }
@@ -782,7 +617,6 @@
             } else {
                 builder.innerHTML = '<span class="placeholder">Selecciona las palabras para construir tu oración...</span>';
             }
-        }
         }
 
         function clearSentence() {
