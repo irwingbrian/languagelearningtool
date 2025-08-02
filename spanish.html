@@ -18,27 +18,106 @@
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
             padding: 20px;
+            display: flex; /* Use flexbox for overall centering if needed */
+            justify-content: center; /* Center horizontally */
+            align-items: flex-start; /* Align to the top of the viewport */
         }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
+        /* New container for the two-panel layout */
+        .main-container {
+            max-width: 1200px; /* Increased max-width for two panels */
+            width: 100%;
+            margin: 0 auto; /* Center the container */
             background: white;
             border-radius: 20px;
             padding: 30px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column; /* Stacks the H1 above the panels */
+            gap: 20px; /* Space between title and panels */
         }
 
         h1 {
             text-align: center;
             color: #2d3748;
-            margin-bottom: 30px;
+            margin-bottom: 10px; /* Reduced margin, as main-container has gap now */
             font-size: 2.5em;
             font-weight: 300;
         }
 
+        /* Flex container for the two panels */
+        .main-layout {
+            display: flex;
+            gap: 30px; /* Space between the left and right panels */
+            flex-wrap: wrap; /* Allows panels to stack on smaller screens */
+            width: 100%;
+        }
+
+        .left-panel, .right-panel {
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            /* flex: 1; default for even distribution */
+        }
+
+        .left-panel {
+            flex: 2; /* Left panel takes more space (e.g., 2/3 of available space) */
+            background: #e9f0f9; /* Light background for building blocks */
+            min-width: 300px; /* Ensure left panel doesn't get too small */
+            max-height: 85vh; /* Limit height to enable scrolling within the panel */
+            overflow-y: auto; /* Enable vertical scrolling */
+            padding-right: 15px; /* Adjust padding for scrollbar */
+        }
+
+        /* Custom scrollbar for left panel */
+        .left-panel::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .left-panel::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .left-panel::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+
+        .left-panel::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        .right-panel {
+            flex: 1; /* Right panel takes less space (e.g., 1/3 of available space) */
+            background: #f7fafc; /* Lighter background for sentence */
+            border: 2px dashed #cbd5e0; /* Match sentence builder border visually */
+            min-width: 280px; /* Ensure right panel doesn't get too small */
+            display: flex;
+            flex-direction: column; /* Stack sentence, button, info vertically */
+            justify-content: flex-start; /* Align content to the top */
+            position: sticky; /* Keep it visible when scrolling left panel */
+            top: 20px; /* Distance from top of viewport */
+            align-self: flex-start; /* Align to the start of the cross axis (top) */
+            min-height: 250px; /* Ensure some minimum height */
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 900px) {
+            .main-layout {
+                flex-direction: column; /* Stack panels vertically */
+            }
+            .left-panel, .right-panel {
+                min-width: unset; /* Remove min-width when stacked */
+                max-height: unset; /* Remove max-height, allow content to dictate height */
+                overflow-y: visible; /* No internal scrolling when stacked */
+                position: static; /* Remove sticky positioning */
+            }
+        }
+
+
         .section {
-            margin-bottom: 30px;
+            margin-bottom: 25px; /* Slightly reduced margin for tighter packing in left panel */
         }
 
         .section-title {
@@ -52,7 +131,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 15px; /* Adjust margin */
         }
 
         .word-button {
@@ -97,18 +176,19 @@
         }
 
         .sentence-builder {
-            background: #f7fafc;
-            border: 2px dashed #cbd5e0;
-            border-radius: 15px;
-            padding: 30px;
+            /* Now part of .right-panel, remove dashed border and background from here */
+            border: none; /* Removed */
+            background: none; /* Removed */
+            padding: 10px; /* Adjusted padding */
             text-align: center;
-            margin: 30px 0;
-            min-height: 120px;
+            margin: 0; /* Remove specific margins, controlled by right-panel flex */
+            min-height: 100px; /* Ensure some height even if empty */
             display: flex;
             align-items: center;
             justify-content: center;
             flex-wrap: wrap;
             gap: 15px;
+            flex-grow: 1; /* Allows it to take available space */
         }
 
         /* Styles for individual draggable sentence parts */
@@ -184,7 +264,7 @@
             cursor: pointer;
             font-size: 16px;
             font-weight: 600;
-            margin: 20px auto;
+            margin: 20px auto; /* Center in its panel */
             display: block;
             transition: all 0.3s ease;
         }
@@ -387,139 +467,138 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="main-container">
         <h1>🌟 Constructor de Oraciones en Español</h1>
         
-        <div class="section">
-            <div class="section-title">📍 Sujeto (Subject)</div>
-            <div class="word-grid">
-                <button class="word-button subject" onclick="addWordToSentence('subject', 'yo')">yo</button>
-                <button class="word-button subject" onclick="addWordToSentence('subject', 'tú')">tú</button>
-                <button class="word-button subject" onclick="addWordToSentence('subject', 'él')">él</button>
-                <button class="word-button subject" onclick="addWordToSentence('subject', 'ella')">ella</button>
-                <button class="word-button subject" onclick="addWordToSentence('subject', 'nosotros')">nosotros</button>
-                <button class="word-button subject" onclick="addWordToSentence('subject', 'ustedes')">ustedes</button>
-                <button class="word-button subject" onclick="addWordToSentence('subject', 'ellos')">ellos</button>
-                <button class="word-button subject" onclick="addWordToSentence('subject', 'ellas')">ellas</button>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-title">⚡ Verbo (Verb)</div>
-            <div class="word-grid" id="verbGrid">
+        <div class="main-layout">
+            <div class="left-panel">
+                <div class="section">
+                    <div class="section-title">📍 Sujeto (Subject)</div>
+                    <div class="word-grid">
+                        <button class="word-button subject" onclick="addWordToSentence('subject', 'yo')">yo</button>
+                        <button class="word-button subject" onclick="addWordToSentence('subject', 'tú')">tú</button>
+                        <button class="word-button subject" onclick="addWordToSentence('subject', 'él')">él</button>
+                        <button class="word-button subject" onclick="addWordToSentence('subject', 'ella')">ella</button>
+                        <button class="word-button subject" onclick="addWordToSentence('subject', 'nosotros')">nosotros</button>
+                        <button class="word-button subject" onclick="addWordToSentence('subject', 'ustedes')">ustedes</button>
+                        <button class="word-button subject" onclick="addWordToSentence('subject', 'ellos')">ellos</button>
+                        <button class="word-button subject" onclick="addWordToSentence('subject', 'ellas')">ellas</button>
+                    </div>
                 </div>
-        </div>
 
-        <div class="section">
-            <div class="section-title">🎯 Sustantivo (Noun)</div>
-            <div class="word-grid" id="nounGrid">
+                <div class="section">
+                    <div class="section-title">⚡ Verbo (Verb)</div>
+                    <div class="word-grid" id="verbGrid">
+                        </div>
                 </div>
-        </div>
 
-        <div class="section">
-            <div class="section-title">🔗 Preposiciones (Prepositions)</div>
-            <div class="word-grid" id="prepositionGrid">
+                <div class="section">
+                    <div class="section-title">🎯 Sustantivo (Noun)</div>
+                    <div class="word-grid" id="nounGrid">
+                        </div>
                 </div>
-        </div>
 
-        <div class="section">
-            <div class="section-title">➕ Conectores (Connectors)</div>
-            <div class="word-grid" id="connectorGrid">
+                <div class="section">
+                    <div class="section-title">🔗 Preposiciones (Prepositions)</div>
+                    <div class="word-grid" id="prepositionGrid">
+                        </div>
                 </div>
-        </div>
 
-        <div class="sentence-builder" id="sentenceBuilder">
-            <span class="placeholder">Arrastra y suelta palabras aquí para construir tu oración...</span>
-        </div>
-
-        <button class="clear-button" onclick="clearSentence()">🔄 Limpiar Oración</button>
-
-        <button class="toggle-vocab" onclick="toggleVocabSection()">➕ Añadir Verbos</button>
-
-        <div class="add-vocab-section hidden" id="vocabSection">
-            <div class="add-vocab-title">🌱 Añade tus propios verbos</div>
-            
-            <div class="vocab-form">
-                <div class="form-group">
-                    <label class="form-label">Verbo (infinitivo)</label>
-                    <input type="text" class="form-input" id="newVerb" placeholder="ej: caminar, correr, salir...">
+                <div class="section">
+                    <div class="section-title">➕ Conectores (Connectors)</div>
+                    <div class="word-grid" id="connectorGrid">
+                        </div>
                 </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Tipo de verbo</label>
-                    <select class="form-select" id="verbType">
-                        <option value="regular-ar">Regular -AR (como hablar)</option>
-                        <option value="regular-er">Regular -ER (como comer)</option>
-                        <option value="regular-ir">Regular -IR (como vivir)</option>
-                        <option value="irregular">Irregular (necesita conjugaciones especiales)</option>
-                    </select>
+
+                <button class="toggle-vocab" onclick="toggleVocabSection()">➕ Añadir Verbos</button>
+
+                <div class="add-vocab-section hidden" id="vocabSection">
+                    <div class="add-vocab-title">🌱 Añade tus propios verbos</div>
+                    
+                    <div class="vocab-form">
+                        <div class="form-group">
+                            <label class="form-label">Verbo (infinitivo)</label>
+                            <input type="text" class="form-input" id="newVerb" placeholder="ej: caminar, correr, salir...">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Tipo de verbo</label>
+                            <select class="form-select" id="verbType">
+                                <option value="regular-ar">Regular -AR (como hablar)</option>
+                                <option value="regular-er">Regular -ER (como comer)</option>
+                                <option value="regular-ir">Regular -IR (como vivir)</option>
+                                <option value="irregular">Irregular (necesita conjugaciones especiales)</option>
+                            </select>
+                        </div>
+                        
+                        <button class="add-button" onclick="addNewVerb()">➕ Añadir</button>
+                    </div>
+
+                    <div class="custom-verbs" id="customVerbs">
+                        <div style="font-weight: 600; color: #2d3748; margin-bottom: 10px;">Verbos añadidos:</div>
+                    </div>
                 </div>
-                
-                <button class="add-button" onclick="addNewVerb()">➕ Añadir</button>
-            </div>
 
-            <div class="custom-verbs" id="customVerbs">
-                <div style="font-weight: 600; color: #2d3748; margin-bottom: 10px;">Verbos añadidos:</div>
-            </div>
-        </div>
+                <button class="toggle-noun" onclick="toggleNounSection()">➕ Añadir Sustantivos</button>
 
-        <button class="toggle-noun" onclick="toggleNounSection()">➕ Añadir Sustantivos</button>
+                <div class="add-noun-section hidden" id="nounSection">
+                    <div class="add-noun-title">📚 Añade tus propios sustantivos</div>
+                    
+                    <div class="noun-form">
+                        <div class="form-group">
+                            <label class="form-label">Sustantivo</label>
+                            <input type="text" class="form-input noun-input" id="newNoun" placeholder="ej: la casa, el perro, las flores...">
+                        </div>
+                        
+                        <button class="add-button noun-button" onclick="addNewNoun()">➕ Añadir</button>
+                    </div>
 
-        <div class="add-noun-section hidden" id="nounSection">
-            <div class="add-noun-title">📚 Añade tus propios sustantivos</div>
-            
-            <div class="noun-form">
-                <div class="form-group">
-                    <label class="form-label">Sustantivo</label>
-                    <input type="text" class="form-input noun-input" id="newNoun" placeholder="ej: la casa, el perro, las flores...">
+                    <div class="custom-nouns" id="customNouns">
+                        <div style="font-weight: 600; color: #2d3748; margin-bottom: 10px;">Sustantivos añadidos:</div>
+                    </div>
                 </div>
-                
-                <button class="add-button noun-button" onclick="addNewNoun()">➕ Añadir</button>
-            </div>
 
-            <div class="custom-nouns" id="customNouns">
-                <div style="font-weight: 600; color: #2d3748; margin-bottom: 10px;">Sustantivos añadidos:</div>
-            </div>
-        </div>
-
-        <button class="toggle-preposition" onclick="togglePrepositionSection()">➕ Añadir Preposiciones</button>
-        <div class="add-preposition-section hidden" id="prepositionSection">
-            <div class="add-preposition-title">📍 Añade tus propias preposiciones</div>
-            <div class="preposition-form">
-                <div class="form-group">
-                    <label class="form-label">Preposición</label>
-                    <input type="text" class="form-input preposition-input" id="newPreposition" placeholder="ej: a, con, de, en...">
+                <button class="toggle-preposition" onclick="togglePrepositionSection()">➕ Añadir Preposiciones</button>
+                <div class="add-preposition-section hidden" id="prepositionSection">
+                    <div class="add-preposition-title">📍 Añade tus propias preposiciones</div>
+                    <div class="preposition-form">
+                        <div class="form-group">
+                            <label class="form-label">Preposición</label>
+                            <input type="text" class="form-input preposition-input" id="newPreposition" placeholder="ej: a, con, de, en...">
+                        </div>
+                        <button class="add-button preposition-button" onclick="addNewPreposition()">➕ Añadir</button>
+                    </div>
+                    <div class="custom-prepositions" id="customPrepositions">
+                        <div style="font-weight: 600; color: #2d3748; margin-bottom: 10px;">Preposiciones añadidas:</div>
+                    </div>
                 </div>
-                <button class="add-button preposition-button" onclick="addNewPreposition()">➕ Añadir</button>
-            </div>
-            <div class="custom-prepositions" id="customPrepositions">
-                <div style="font-weight: 600; color: #2d3748; margin-bottom: 10px;">Preposiciones añadidas:</div>
-            </div>
-        </div>
 
-        <button class="toggle-connector" onclick="toggleConnectorSection()">➕ Añadir Conectores</button>
-        <div class="add-connector-section hidden" id="connectorSection">
-            <div class="add-connector-title">➕ Añade tus propios conectores</div>
-            <div class="connector-form">
-                <div class="form-group">
-                    <label class="form-label">Conector</label>
-                    <input type="text" class="form-input connector-input" id="newConnector" placeholder="ej: y, o, pero, aunque...">
+                <button class="toggle-connector" onclick="toggleConnectorSection()">➕ Añadir Conectores</button>
+                <div class="add-connector-section hidden" id="connectorSection">
+                    <div class="add-connector-title">➕ Añade tus propios conectores</div>
+                    <div class="connector-form">
+                        <div class="form-group">
+                            <label class="form-label">Conector</label>
+                            <input type="text" class="form-input connector-input" id="newConnector" placeholder="ej: y, o, pero, aunque...">
+                        </div>
+                        <button class="add-button connector-button" onclick="addNewConnector()">➕ Añadir</button>
+                    </div>
+                    <div class="custom-connectors" id="customConnectors">
+                        <div style="font-weight: 600; color: #2d3748; margin-bottom: 10px;">Conectores añadidos:</div>
+                    </div>
                 </div>
-                <button class="add-button connector-button" onclick="addNewConnector()">➕ Añadir</button>
-            </div>
-            <div class="custom-connectors" id="customConnectors">
-                <div style="font-weight: 600; color: #2d3748; margin-bottom: 10px;">Conectores añadidos:</div>
-            </div>
-        </div>
+            </div> <div class="right-panel">
+                <div class="sentence-builder" id="sentenceBuilder">
+                    <span class="placeholder">Arrastra y suelta palabras aquí para construir tu oración...</span>
+                </div>
 
+                <button class="clear-button" onclick="clearSentence()">🔄 Limpiar Oración</button>
 
-        <div class="conjugation-info" id="conjugationInfo" style="display: none;">
-            <strong>💡 Información de conjugación:</strong>
-            <div id="conjugationDetails"></div>
-        </div>
-    </div>
-
-    <script>
+                <div class="conjugation-info" id="conjugationInfo" style="display: none;">
+                    <strong>💡 Información de conjugación:</strong>
+                    <div id="conjugationDetails"></div>
+                </div>
+            </div> </div> </div> <script>
         // Use an array to store the full sentence, allowing flexible order
         let sentenceElements = []; 
 
