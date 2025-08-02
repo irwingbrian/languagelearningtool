@@ -235,7 +235,7 @@
             font-weight: 600;
             min-width: 80px;
             text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba[0m rgba(0,0,0,0.1);
             cursor: grab;
             display: flex;
             align-items: center;
@@ -350,7 +350,8 @@
 
         .vocab-form {
             display: grid;
-            grid-template-columns: 1fr 1fr auto;
+            /* Changed from 1fr 1fr auto to just 1fr for single column input field */
+            grid-template-columns: 1fr; /* Single column for input and button below */
             gap: 15px;
             align-items: end;
         }
@@ -414,15 +415,19 @@
             font-weight: 600;
             height: fit-content;
             transition: transform 0.3s ease;
+            width: 100%; /* Make add button full width */
         }
         .add-button.noun-button {
             background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%); /* Blue for nouns */
+            width: auto; /* Reset width for other forms if needed */
         }
         .add-button.preposition-button {
             background: linear-gradient(135deg, #38b2ac 0%, #2c7a7b 100%); /* Teal for prepositions */
+            width: auto;
         }
         .add-button.connector-button {
             background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%); /* Orange for connectors */
+            width: auto;
         }
 
         .add-button:hover {
@@ -583,16 +588,7 @@
                             <label class="form-label">Verbo (infinitivo)</label>
                             <input type="text" class="form-input" id="newVerb" placeholder="ej: caminar, correr, salir...">
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">Tipo de verbo</label>
-                            <select class="form-select" id="verbType">
-                                <option value="regular-ar">Regular -AR (como hablar)</option>
-                                <option value="regular-er">Regular -ER (como comer)</option>
-                                <option value="regular-ir">Regular -IR (como vivir)</option>
-                                <option value="irregular">Irregular (necesita conjugaciones especiales)</option>
-                            </select>
-                        </div>
-                        <button class="add-button" onclick="addNewVerb()">➕ Añadir</button>
+                        <button class="add-button" onclick="addNewVerb()">➕ Añadir Verbo</button>
                     </div>
                     <div class="custom-verbs" id="customVerbs">
                         <div style="font-weight: 600; color: #2d3748; margin-bottom: 10px;">Verbos añadidos:</div>
@@ -775,8 +771,18 @@
 
             const allVerbsToDisplay = { ...allVerbsData }; 
             customVerbs.forEach(verbData => {
-                if (verbData.type !== 'irregular' && !verbData.conjugations) {
-                    verbData.conjugations = generateConjugation(verbData.verb, verbData.type);
+                // Ensure custom verbs (especially irregular ones without conjugations from input)
+                // get basic conjugation placeholders if they don't have full data.
+                if (!verbData.conjugations) {
+                    if (verbData.type !== 'irregular') {
+                         verbData.conjugations = generateConjugation(verbData.verb, verbData.type);
+                    } else {
+                        // For irregular custom verbs without specific conjugations, use a placeholder
+                        verbData.conjugations = {
+                            'yo': `${verbData.verb}*`, 'tú': `${verbData.verb}*`, 'él': `${verbData.verb}*`, 'ella': `${verbData.verb}*`, 'usted': `${verbData.verb}*`,
+                            'nosotros': `${verbData.verb}*`, 'ustedes': `${verbData.verb}*`, 'ellos': `${verbData.verb}*`, 'ellas': `${verbData.verb}*` 
+                        };
+                    }
                 }
                 allVerbsToDisplay[verbData.verb] = verbData; 
             });
@@ -789,10 +795,14 @@
                 button.textContent = verb;
                 button.onclick = () => addWordToSentence('verb', verb); 
                 
+                const verbInfo = allVerbsToDisplay[verb];
+
                 if (customVerbs.some(v => v.verb === verb)) {
-                    button.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)';
-                } else if (allVerbsToDisplay[verb].type === 'irregular') {
-                    button.style.background = 'linear-gradient(135deg, #e07a5f 0%, #a43a3d 100%)'; 
+                    button.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)'; // Custom verb color
+                } else if (verbInfo.type === 'irregular') {
+                    button.style.background = 'linear-gradient(135deg, #e07a5f 0%, #a43a3d 100%)'; // Irregular verb color
+                } else {
+                    button.style.background = 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'; // Default regular verb color
                 }
                 
                 verbGrid.appendChild(button);
@@ -873,56 +883,54 @@
         // --- Add/Remove Vocabulary Functions ---
         function addNewVerb() {
             const verbInput = document.getElementById('newVerb');
-            const typeSelect = document.getElementById('verbType');
-            
             const verb = verbInput.value.trim().toLowerCase();
-            const type = typeSelect.value;
             
             if (!verb) {
-                alert('Por favor, introduce un verbo');
+                alert('Por favor, introduce un verbo.');
                 return;
             }
             
             if (allVerbsData[verb] || customVerbs.some(v => v.verb === verb)) {
-                alert('Este verbo ya existe');
-                return;
-            }
-            
-            const validEndings = {
-                'regular-ar': 'ar', 'regular-er': 'er', 'regular-ir': 'ir'
-            };
-            
-            if (type !== 'irregular' && !verb.endsWith(validEndings[type])) {
-                alert(`Los verbos ${type} deben terminar en -${validEndings[type]}`);
+                alert('Este verbo ya existe en la lista predeterminada o en tus verbos personalizados.');
                 return;
             }
 
-            let verbData = { verb, type };
+            let verbType;
+            let conjugations = {};
 
-            if (type === 'irregular') {
-                const confirmation = confirm(`Has seleccionado "Irregular" para "${verb}". Necesitas añadir sus conjugaciones manualmente. ¿Deseas añadirlo como un verbo irregular genérico por ahora? (Usará infinitivo con asterisco)`);
-                if (confirmation) {
-                    verbData.conjugations = {
-                        'yo': `${verb}*`, 'tú': `${verb}*`, 'él': `${verb}*`, 'ella': `${verb}*`, 'usted': `${verb}*`,
-                        'nosotros': `${verb}*`, 'ustedes': `${verb}*`, 'ellos': `${verb}*`, 'ellas': `${verb}*` 
-                    };
-                } else {
+            // Automatic type detection for new verbs
+            if (verb.endsWith('ar')) {
+                verbType = 'regular-ar';
+                conjugations = generateConjugation(verb, verbType);
+            } else if (verb.endsWith('er')) {
+                verbType = 'regular-er';
+                conjugations = generateConjugation(verb, verbType);
+            } else if (verb.endsWith('ir')) {
+                verbType = 'regular-ir';
+                conjugations = generateConjugation(verb, verbType);
+            } else {
+                // If ending is not -ar, -er, -ir, assume irregular
+                verbType = 'irregular';
+                const confirmation = confirm(`"${verb}" no termina en -ar, -er, o -ir. Se clasificará como "Irregular". Necesitarás gestionar sus conjugaciones si la herramienta avanza. ¿Deseas añadirlo de todos modos?`);
+                if (!confirmation) {
                     return; 
                 }
-            } else {
-                verbData.conjugations = generateConjugation(verb, type);
+                // For irregular custom verbs without specific conjugations, use a placeholder
+                conjugations = {
+                    'yo': `${verb}*`, 'tú': `${verb}*`, 'él': `${verb}*`, 'ella': `${verb}*`, 'usted': `${verb}*`,
+                    'nosotros': `${verb}*`, 'ustedes': `${verb}*`, 'ellos': `${verb}*`, 'ellas': `${verb}*` 
+                };
             }
             
-            customVerbs.push(verbData);
+            customVerbs.push({ verb, type: verbType, conjugations });
             saveCustomData(); 
             
             updateVerbGrid();
             updateCustomVerbsDisplay();
             
             verbInput.value = '';
-            typeSelect.value = 'regular-ar';
             
-            alert(`¡Verbo "${verb}" añadido correctamente!`);
+            alert(`¡Verbo "${verb}" (tipo: ${verbType}) añadido correctamente!`);
         }
 
         function addNewNoun() {
@@ -1001,6 +1009,7 @@
             customVerbs.forEach((verbData, index) => {
                 const tag = document.createElement('span');
                 tag.className = 'custom-verb-tag';
+                // Display type for custom verbs
                 tag.innerHTML = `${verbData.verb} (${verbData.type}) <span class="remove-tag" onclick="removeCustomVerb(${index})">×</span>`;
                 container.appendChild(tag);
             });
@@ -1121,13 +1130,14 @@
                             if (verbEntry && verbEntry.conjugations && verbEntry.conjugations[lastSubject]) {
                                 displayValue = verbEntry.conjugations[lastSubject];
                                 info.style.display = 'block';
-                                const verbType = verbEntry.type === 'irregular' ? 'irregular' : `regular -${element.value.slice(-2)}`;
+                                const verbTypeDisplay = (verbEntry.type === 'irregular' || verbEntry.type === 'placeholder') ? 'irregular' : `regular -${element.value.slice(-2)}`;
                                 details.innerHTML = `
-                                    <strong>${element.value}</strong> (${verbType}) conjugado con <strong>${lastSubject}</strong> = <strong>${displayValue}</strong>
+                                    <strong>${element.value}</strong> (${verbTypeDisplay}) conjugado con <strong>${lastSubject}</strong> = <strong>${displayValue}</strong>
                                     <br><small>Presente de indicativo</small>
                                 `;
                             } else {
-                                displayValue = `${element.value} (conjugación no disponible)`;
+                                // Fallback for verbs without full conjugations (e.g., placeholder irregulars)
+                                displayValue = `${element.value}* (conjugación no disponible)`;
                             }
                         } else {
                             displayValue = `${element.value} (infinitivo)`; 
