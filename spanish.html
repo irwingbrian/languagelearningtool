@@ -311,8 +311,7 @@
                 <button class="word-button subject" onclick="selectSubject('él')">él</button>
                 <button class="word-button subject" onclick="selectSubject('ella')">ella</button>
                 <button class="word-button subject" onclick="selectSubject('nosotros')">nosotros</button>
-                <button class="word-button subject" onclick="selectSubject('ustedes')">ustedes</button>
-                <button class="word-button subject" onclick="selectSubject('ellos')">ellos</button>
+                <button class="word-button subject" onclick="selectSubject('ustedes')">ustedes</button> <button class="word-button subject" onclick="selectSubject('ellos')">ellos</button>
                 <button class="word-button subject" onclick="selectSubject('ellas')">ellas</button>
             </div>
         </div>
@@ -320,29 +319,13 @@
         <div class="section">
             <div class="section-title">⚡ Verbo (Verb)</div>
             <div class="word-grid" id="verbGrid">
-                <button class="word-button verb" onclick="selectVerb('hablar')">hablar</button>
-                <button class="word-button verb" onclick="selectVerb('comer')">comer</button>
-                <button class="word-button verb" onclick="selectVerb('vivir')">vivir</button>
-                <button class="word-button verb" onclick="selectVerb('estudiar')">estudiar</button>
-                <button class="word-button verb" onclick="selectVerb('trabajar')">trabajar</button>
-                <button class="word-button verb" onclick="selectVerb('beber')">beber</button>
-                <button class="word-button verb" onclick="selectVerb('escribir')">escribir</button>
-                <button class="word-button verb" onclick="selectVerb('leer')">leer</button>
-            </div>
+                </div>
         </div>
 
         <div class="section">
             <div class="section-title">🎯 Objeto (Object)</div>
             <div class="word-grid" id="objectGrid">
-                <button class="word-button object" onclick="selectObject('el libro')">el libro</button>
-                <button class="word-button object" onclick="selectObject('la comida')">la comida</button>
-                <button class="word-button object" onclick="selectObject('el español')">el español</button>
-                <button class="word-button object" onclick="selectObject('la música')">la música</button>
-                <button class="word-button object" onclick="selectObject('el agua')">el agua</button>
-                <button class="word-button object" onclick="selectObject('la carta')">la carta</button>
-                <button class="word-button object" onclick="selectObject('el trabajo')">el trabajo</button>
-                <button class="word-button object" onclick="selectObject('la película')">la película</button>
-            </div>
+                </div>
         </div>
 
         <div class="sentence-builder" id="sentenceBuilder">
@@ -410,87 +393,59 @@
         let selectedSubject = null;
         let selectedVerb = null;
         let selectedObject = null;
-        let customVerbs = [];
-        let customNouns = []; // New array for custom nouns
-
-        // Conjugation engine for regular verbs
-        function conjugateRegularVerb(verb, type, subject) {
-            const stem = verb.slice(0, -2); // Remove -ar, -er, or -ir
-            
-            const endings = {
-                'regular-ar': {
-                    'yo': 'o', 'tú': 'as', 'él': 'a', 'ella': 'a',
-                    'nosotros': 'amos', 'ustedes': 'áis', 'ellos': 'an', 'ellas': 'an'
-                },
-                'regular-er': {
-                    'yo': 'o', 'tú': 'es', 'él': 'e', 'ella': 'e',
-                    'nosotros': 'emos', 'ustedes': 'éis', 'ellos': 'en', 'ellas': 'en'
-                },
-                'regular-ir': {
-                    'yo': 'o', 'tú': 'es', 'él': 'e', 'ella': 'e',
-                    'nosotros': 'imos', 'ustedes': 'ís', 'ellos': 'en', 'ellas': 'en'
-                }
-            };
-
-            return stem + endings[type][subject];
-        }
-
-        // Generate full conjugation for a verb
-        function generateConjugation(verb, type) {
-            if (type === 'irregular') {
-                return {
-                    'yo': `${verb}*`, 'tú': `${verb}*`, 'él': `${verb}*`, 'ella': `${verb}*`,
-                    'nosotros': `${verb}*`, 'ustedes': `${verb}*`, 'ellos': `${verb}*`, 'ellas': `${verb}*`
-                };
-            }
-
-            const conjugation = {};
-            const subjects = ['yo', 'tú', 'él', 'ella', 'nosotros', 'ustedes', 'ellos', 'ellas'];
-            
-            subjects.forEach(subject => {
-                conjugation[subject] = conjugateRegularVerb(verb, type, subject);
-            });
-
-            return conjugation;
-        }
-
-        const conjugations = {
-            'hablar': {
-                'yo': 'hablo', 'tú': 'hablas', 'él': 'habla', 'ella': 'habla',
-                'nosotros': 'hablamos', 'ustedes': 'hablan', 'ellos': 'hablan', 'ellas': 'hablan'
-            },
-            'comer': {
-                'yo': 'como', 'tú': 'comes', 'él': 'come', 'ella': 'come',
-                'nosotros': 'comemos', 'ustedes': 'comen', 'ellos': 'comen', 'ellas': 'comen'
-            },
-            'vivir': {
-                'yo': 'vivo', 'tú': 'vives', 'él': 'vive', 'ella': 'vive',
-                'nosotros': 'vivimos', 'ustedes': 'viven', 'ellos': 'viven', 'ellas': 'viven'
-            },
-            'estudiar': {
-                'yo': 'estudio', 'tú': 'estudias', 'él': 'estudia', 'ella': 'estudia',
-                'nosotros': 'estudiamos', 'ustedes': 'estudian', 'ellos': 'estudian', 'ellas': 'estudian'
-            },
-            'trabajar': {
-                'yo': 'trabajo', 'tú': 'trabajas', 'él': 'trabaja', 'ella': 'trabaja',
-                'nosotros': 'trabajamos', 'ustedes': 'trabajan', 'ellos': 'trabajan', 'ellas': 'trabajan'
-            },
-            'beber': {
-                'yo': 'bebo', 'tú': 'bebes', 'él': 'bebe', 'ella': 'bebe',
-                'nosotros': 'bebemos', 'ustedes': 'beben', 'ellos': 'beben', 'ellas': 'beben'
-            },
-            'escribir': {
-                'yo': 'escribo', 'tú': 'escribes', 'él': 'escribe', 'ella': 'escribe',
-                'nosotros': 'escribimos', 'ustedes': 'escriben', 'ellos': 'escriben', 'ellas': 'escriben'
-            },
-            'leer': {
-                'yo': 'leo', 'tú': 'lees', 'él': 'lee', 'ella': 'lee',
-                'nosotros': 'leemos', 'ustedes': 'leen', 'ellos': 'leen', 'ellas': 'leen'
-            }
-        };
+        let allVerbsData = {}; 
+        let customVerbs = []; 
+        let customNouns = []; 
 
         const defaultObjects = ['el libro', 'la comida', 'el español', 'la música', 'el agua', 'la carta', 'el trabajo', 'la película'];
 
+        // !! IMPORTANT !!
+        // Replace this with the RAW URL of your verbs.json file on GitHub
+        const VERBS_JSON_URL = 'https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO_NAME/main/verbs.json';
+        // Example: 'https://raw.githubusercontent.com/Gemini-AI/spanish-tool-data/main/verbs.json';
+
+        // Function to fetch verbs data
+        async function fetchVerbsData() {
+            try {
+                const response = await fetch(VERBS_JSON_URL);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                allVerbsData = data; 
+                updateVerbGrid(); 
+            } catch (error) {
+                console.error("Could not fetch verbs data:", error);
+                alert("Error loading verb data. Please check the JSON URL or your internet connection.");
+            }
+        }
+
+        // Conjugation engine for regular verbs
+        function conjugateRegularVerb(verb, type, subject) {
+            const stem = verb.slice(0, -2); 
+            
+            const endings = {
+                'regular-ar': {
+                    'yo': 'o', 'tú': 'as', 'él': 'a', 'ella': 'a', 'usted': 'a', // Added 'usted' for consistency if needed later
+                    'nosotros': 'amos', 'ustedes': 'an', 'ellos': 'an', 'ellas': 'an' // Changed 'vosotros' to 'ustedes'
+                },
+                'regular-er': {
+                    'yo': 'o', 'tú': 'es', 'él': 'e', 'ella': 'e', 'usted': 'e',
+                    'nosotros': 'emos', 'ustedes': 'en', 'ellos': 'en', 'ellas': 'en' // Changed 'vosotros' to 'ustedes'
+                },
+                'regular-ir': {
+                    'yo': 'o', 'tú': 'es', 'él': 'e', 'ella': 'e', 'usted': 'e',
+                    'nosotros': 'imos', 'ustedes': 'en', 'ellos': 'en', 'ellas': 'en' // Changed 'vosotros' to 'ustedes'
+                }
+            };
+
+            // For 'ustedes', the conjugation is the same as 'ellos/ellas' for regular verbs.
+            // If the subject is 'ustedes', use the 'ellos' ending, unless specifically defined.
+            // Here, we've explicitly added 'ustedes' to the endings object.
+            return stem + endings[type][subject];
+        }
+
+        // --- Selection Functions ---
         function selectSubject(subject) {
             selectedSubject = subject;
             updateSentence();
@@ -506,59 +461,56 @@
             updateSentence();
         }
 
+        // --- Grid Update Functions ---
         function updateVerbGrid() {
             const verbGrid = document.getElementById('verbGrid');
-            
-            // Clear existing verbs
-            verbGrid.innerHTML = '';
-            
-            // Add default verbs
-            const defaultVerbs = ['hablar', 'comer', 'vivir', 'estudiar', 'trabajar', 'beber', 'escribir', 'leer'];
-            defaultVerbs.forEach(verb => {
+            verbGrid.innerHTML = ''; 
+
+            const allVerbsToDisplay = { ...allVerbsData }; 
+            customVerbs.forEach(verbData => {
+                allVerbsToDisplay[verbData.verb] = { 
+                    type: verbData.type,
+                    conjugations: verbData.type === 'irregular' ? verbData.conjugations : generateConjugation(verbData.verb, verbData.type)
+                };
+            });
+
+            const verbInfinitives = Object.keys(allVerbsToDisplay).sort();
+
+            verbInfinitives.forEach(verb => {
                 const button = document.createElement('button');
                 button.className = 'word-button verb';
                 button.textContent = verb;
                 button.onclick = () => selectVerb(verb);
-                verbGrid.appendChild(button);
-            });
-            
-            // Add custom verbs
-            customVerbs.forEach(verbData => {
-                const button = document.createElement('button');
-                button.className = 'word-button verb';
-                button.textContent = verbData.verb;
-                button.onclick = () => selectVerb(verbData.verb);
-                button.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)';
+                
+                if (customVerbs.some(v => v.verb === verb)) {
+                    button.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)';
+                } else if (allVerbsToDisplay[verb].type === 'irregular') {
+                    button.style.background = 'linear-gradient(135deg, #e07a5f 0%, #a43a3d 100%)'; 
+                }
+                
                 verbGrid.appendChild(button);
             });
         }
 
         function updateObjectGrid() {
             const objectGrid = document.getElementById('objectGrid');
+            objectGrid.innerHTML = ''; 
             
-            // Clear existing objects
-            objectGrid.innerHTML = '';
-            
-            // Add default objects
-            defaultObjects.forEach(object => {
+            const allNounsToDisplay = [...defaultObjects, ...customNouns].sort();
+
+            allNounsToDisplay.forEach(object => {
                 const button = document.createElement('button');
                 button.className = 'word-button object';
                 button.textContent = object;
                 button.onclick = () => selectObject(object);
-                objectGrid.appendChild(button);
-            });
-            
-            // Add custom objects
-            customNouns.forEach(noun => {
-                const button = document.createElement('button');
-                button.className = 'word-button object';
-                button.textContent = noun;
-                button.onclick = () => selectObject(noun);
-                button.style.background = 'linear-gradient(135deg, #4299e1 0%, #3182ce 100%)'; // New color for custom nouns
+                if (customNouns.includes(object)) {
+                    button.style.background = 'linear-gradient(135deg, #4299e1 0%, #3182ce 100%)';
+                }
                 objectGrid.appendChild(button);
             });
         }
 
+        // --- Section Toggle Functions ---
         function toggleVocabSection() {
             const section = document.getElementById('vocabSection');
             section.classList.toggle('hidden');
@@ -569,6 +521,7 @@
             section.classList.toggle('hidden');
         }
 
+        // --- Add/Remove Vocabulary Functions ---
         function addNewVerb() {
             const verbInput = document.getElementById('newVerb');
             const typeSelect = document.getElementById('verbType');
@@ -581,13 +534,11 @@
                 return;
             }
             
-            // Check if verb already exists
-            if (conjugations[verb] || customVerbs.some(v => v.verb === verb)) {
+            if (allVerbsData[verb] || customVerbs.some(v => v.verb === verb)) {
                 alert('Este verbo ya existe');
                 return;
             }
             
-            // Validate verb ending
             const validEndings = {
                 'regular-ar': 'ar',
                 'regular-er': 'er', 
@@ -598,24 +549,53 @@
                 alert(`Los verbos ${type} deben terminar en -${validEndings[type]}`);
                 return;
             }
+
+            let verbData = { verb, type };
+
+            if (type === 'irregular') {
+                const confirmation = confirm(`Has seleccionado "Irregular" para "${verb}". Necesitas añadir sus conjugaciones manualmente. ¿Deseas añadirlo como un verbo irregular genérico por ahora?`);
+                if (confirmation) {
+                    // Note: For custom irregular verbs, 'ustedes' conjugation would need to be manually specified if different from 'ellos/ellas'
+                    verbData.conjugations = {
+                        'yo': `${verb}*`, 'tú': `${verb}*`, 'él': `${verb}*`, 'ella': `${verb}*`, 'usted': `${verb}*`,
+                        'nosotros': `${verb}*`, 'ustedes': `${verb}*`, 'ellos': `${verb}*`, 'ellas': `${verb}*` 
+                    };
+                } else {
+                    return; 
+                }
+            } else {
+                verbData.conjugations = generateConjugation(verb, type);
+            }
             
-            // Generate conjugation and add to system
-            const newConjugation = generateConjugation(verb, type);
-            conjugations[verb] = newConjugation;
+            customVerbs.push(verbData);
             
-            // Add to custom verbs list
-            customVerbs.push({ verb, type });
-            
-            // Update UI
             updateVerbGrid();
             updateCustomVerbsDisplay();
             
-            // Clear form
             verbInput.value = '';
             typeSelect.value = 'regular-ar';
             
             alert(`¡Verbo "${verb}" añadido correctamente!`);
         }
+        
+        // This function is new or significantly modified from previous steps.
+        // It's responsible for generating the full conjugation for a regular verb
+        // based on its type (-ar, -er, -ir) and creating the structure expected
+        // by the allVerbsData object.
+        function generateConjugation(verb, type) {
+            const conjugation = {};
+            // Updated subjects array to include 'usted' and 'ustedes'
+            const subjects = ['yo', 'tú', 'él', 'ella', 'usted', 'nosotros', 'ustedes', 'ellos', 'ellas']; 
+            
+            subjects.forEach(subject => {
+                // 'ustedes' uses the same conjugation ending as 'ellos' and 'ellas' in Latin American Spanish
+                const effectiveSubject = (subject === 'ustedes') ? 'ellos' : subject; 
+                conjugation[subject] = conjugateRegularVerb(verb, type, effectiveSubject);
+            });
+
+            return conjugation;
+        }
+
 
         function addNewNoun() {
             const nounInput = document.getElementById('newNoun');
@@ -627,20 +607,16 @@
                 return;
             }
             
-            // Check if noun already exists
             if (defaultObjects.includes(noun) || customNouns.includes(noun)) {
                 alert('Este sustantivo ya existe');
                 return;
             }
             
-            // Add to custom nouns list
             customNouns.push(noun);
             
-            // Update UI
             updateObjectGrid();
             updateCustomNounsDisplay();
             
-            // Clear form
             nounInput.value = '';
             
             alert(`¡Sustantivo "${noun}" añadido correctamente!`);
@@ -648,11 +624,9 @@
 
         function updateCustomVerbsDisplay() {
             const container = document.getElementById('customVerbs');
-            const title = container.querySelector('div');
-            
-            // Clear existing tags, preserving the title
-            const existingTags = container.querySelectorAll('.custom-verb-tag');
-            existingTags.forEach(tag => tag.remove());
+            while (container.children.length > 1) {
+                container.removeChild(container.lastChild);
+            }
             
             customVerbs.forEach((verbData, index) => {
                 const tag = document.createElement('span');
@@ -664,11 +638,9 @@
 
         function updateCustomNounsDisplay() {
             const container = document.getElementById('customNouns');
-            const title = container.querySelector('div');
-
-            // Clear existing tags, preserving the title
-            const existingTags = container.querySelectorAll('.custom-noun-tag');
-            existingTags.forEach(tag => tag.remove());
+            while (container.children.length > 1) {
+                container.removeChild(container.lastChild);
+            }
             
             customNouns.forEach((noun, index) => {
                 const tag = document.createElement('span');
@@ -681,17 +653,11 @@
         function removeCustomVerb(index) {
             const verbData = customVerbs[index];
             
-            // Remove from conjugations
-            delete conjugations[verbData.verb];
-            
-            // Remove from custom verbs
             customVerbs.splice(index, 1);
             
-            // Update UI
             updateVerbGrid();
             updateCustomVerbsDisplay();
             
-            // Clear selection if it was the removed verb
             if (selectedVerb === verbData.verb) {
                 selectedVerb = null;
                 updateSentence();
@@ -701,14 +667,11 @@
         function removeCustomNoun(index) {
             const noun = customNouns[index];
             
-            // Remove from custom nouns
             customNouns.splice(index, 1);
             
-            // Update UI
             updateObjectGrid();
             updateCustomNounsDisplay();
             
-            // Clear selection if it was the removed noun
             if (selectedObject === noun) {
                 selectedObject = null;
                 updateSentence();
@@ -733,17 +696,17 @@
             }
             
             if (selectedVerb && selectedSubject) {
-                const conjugatedVerb = conjugations[selectedVerb]?.[selectedSubject];
-                if (conjugatedVerb) {
+                const verbEntry = customVerbs.find(v => v.verb === selectedVerb) || allVerbsData[selectedVerb];
+
+                if (verbEntry && verbEntry.conjugations && verbEntry.conjugations[selectedSubject]) {
+                    const conjugatedVerb = verbEntry.conjugations[selectedSubject];
                     sentenceHTML += `<span class="sentence-part selected-verb">${conjugatedVerb}</span>`;
                     
-                    // Show conjugation info
                     info.style.display = 'block';
-                    const verbData = customVerbs.find(v => v.verb === selectedVerb);
-                    const verbType = verbData ? `(${verbData.type})` : '(verbo predeterminado)';
+                    const verbType = verbEntry.type === 'irregular' ? 'irregular' : `regular -${selectedVerb.slice(-2)}`;
                     
                     details.innerHTML = `
-                        <strong>${selectedVerb}</strong> ${verbType} conjugado con <strong>${selectedSubject}</strong> = <strong>${conjugatedVerb}</strong>
+                        <strong>${selectedVerb}</strong> (${verbType}) conjugado con <strong>${selectedSubject}</strong> = <strong>${conjugatedVerb}</strong>
                         <br><small>Presente de indicativo</small>
                     `;
                 } else {
@@ -754,7 +717,7 @@
                 sentenceHTML += `<span class="sentence-part selected-verb">${selectedVerb} (infinitivo)</span>`;
                 info.style.display = 'none';
             } else {
-                info.style.display = 'none'; // Hide info if no verb selected or subject is missing for conjugation
+                info.style.display = 'none';
             }
             
             if (selectedObject) {
@@ -775,9 +738,8 @@
             updateSentence();
         }
 
-        // Initialize the grids on load
         document.addEventListener('DOMContentLoaded', () => {
-            updateVerbGrid();
+            fetchVerbsData(); 
             updateObjectGrid();
             updateCustomVerbsDisplay();
             updateCustomNounsDisplay();
