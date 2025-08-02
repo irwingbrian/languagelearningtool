@@ -1,0 +1,171 @@
+{
+  "hablar": {
+    "type": "regular-ar",
+    "conjugations": {
+      "yo": "hablo",
+      "tú": "hablas",
+      "él": "habla",
+      "ella": "habla",
+      "nosotros": "hablamos",
+      "ustedes": "hablan",
+      "ellos": "hablan",
+      "ellas": "hablan"
+    }
+  },
+  "comer": {
+    "type": "regular-er",
+    "conjugations": {
+      "yo": "como",
+      "tú": "comes",
+      "él": "come",
+      "ella": "come",
+      "nosotros": "comemos",
+      "ustedes": "comen",
+      "ellos": "comen",
+      "ellas": "comen"
+    }
+  },
+  "vivir": {
+    "type": "regular-ir",
+    "conjugations": {
+      "yo": "vivo",
+      "tú": "vives",
+      "él": "vive",
+      "ella": "vive",
+      "nosotros": "vivimos",
+      "ustedes": "viven",
+      "ellos": "viven",
+      "ellas": "viven"
+    }
+  },
+  "estudiar": {
+    "type": "regular-ar",
+    "conjugations": {
+      "yo": "estudio",
+      "tú": "estudias",
+      "él": "estudia",
+      "ella": "estudia",
+      "nosotros": "estudiamos",
+      "ustedes": "estudian",
+      "ellos": "estudian",
+      "ellas": "estudian"
+    }
+  },
+  "trabajar": {
+    "type": "regular-ar",
+    "conjugations": {
+      "yo": "trabajo",
+      "tú": "trabajas",
+      "él": "trabaja",
+      "ella": "trabaja",
+      "nosotros": "trabajamos",
+      "ustedes": "trabajan",
+      "ellos": "trabajan",
+      "ellas": "trabajan"
+    }
+  },
+  "beber": {
+    "type": "regular-er",
+    "conjugations": {
+      "yo": "bebo",
+      "tú": "bebes",
+      "él": "bebe",
+      "ella": "bebe",
+      "nosotros": "bebemos",
+      "ustedes": "beben",
+      "ellos": "beben",
+      "ellas": "beben"
+    }
+  },
+  "escribir": {
+    "type": "regular-ir",
+    "conjugations": {
+      "yo": "escribo",
+      "tú": "escribes",
+      "él": "escribe",
+      "ella": "escribe",
+      "nosotros": "escribimos",
+      "ustedes": "escriben",
+      "ellos": "escriben",
+      "ellas": "escriben"
+    }
+  },
+  "leer": {
+    "type": "regular-er",
+    "conjugations": {
+      "yo": "leo",
+      "tú": "lees",
+      "él": "lee",
+      "ella": "lee",
+      "nosotros": "leemos",
+      "ustedes": "leen",
+      "ellos": "leen",
+      "ellas": "leen"
+    }
+  },
+  "ser": {
+    "type": "irregular",
+    "conjugations": {
+      "yo": "soy",
+      "tú": "eres",
+      "él": "es",
+      "ella": "es",
+      "nosotros": "somos",
+      "ustedes": "son",
+      "ellos": "son",
+      "ellas": "son"
+    }
+  },
+  "estar": {
+    "type": "irregular",
+    "conjugations": {
+      "yo": "estoy",
+      "tú": "estás",
+      "él": "está",
+      "ella": "está",
+      "nosotros": "estamos",
+      "ustedes": "están",
+      "ellos": "están",
+      "ellas": "están"
+    }
+  },
+  "ir": {
+    "type": "irregular",
+    "conjugations": {
+      "yo": "voy",
+      "tú": "vas",
+      "él": "va",
+      "ella": "va",
+      "nosotros": "vamos",
+      "ustedes": "van",
+      "ellos": "van",
+      "ellas": "van"
+    }
+  },
+  "tener": {
+    "type": "irregular",
+    "conjugations": {
+      "yo": "tengo",
+      "tú": "tienes",
+      "él": "tiene",
+      "ella": "tiene",
+      "nosotros": "tenemos",
+      "ustedes": "tienen",
+      "ellos": "tienen",
+      "ellas": "tienen"
+    }
+  },
+  "hacer": {
+    "type": "irregular",
+    "conjugations": {
+      "yo": "hago",
+      "tú": "haces",
+      "él": "hace",
+      "ella": "hace",
+      "nosotros": "hacemos",
+      "ustedes": "hacen",
+      "ellos": "hacen",
+      "ellas": "hacen"
+    }
+  }
+}
