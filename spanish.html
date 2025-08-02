@@ -164,20 +164,33 @@
             padding: 25px;
             margin: 30px 0;
         }
+        .add-noun-section {
+            background: #ebf8ff;
+            border: 2px solid #63b3ed;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+        }
 
-        .add-vocab-title {
+        .add-vocab-title, .add-noun-title {
             color: #2f855a;
             font-size: 1.3em;
             font-weight: 600;
             margin-bottom: 20px;
             text-align: center;
         }
+        .add-noun-title {
+            color: #2b6cb0;
+        }
 
-        .vocab-form {
+        .vocab-form, .noun-form {
             display: grid;
             grid-template-columns: 1fr 1fr auto;
             gap: 15px;
             align-items: end;
+        }
+        .noun-form {
+            grid-template-columns: 1fr auto; /* Nouns don't have a 'type' select */
         }
 
         .form-group {
@@ -204,6 +217,9 @@
             outline: none;
             border-color: #68d391;
         }
+        .form-input.noun-input:focus {
+            border-color: #63b3ed;
+        }
 
         .form-select {
             padding: 12px;
@@ -225,16 +241,19 @@
             height: fit-content;
             transition: transform 0.3s ease;
         }
+        .add-button.noun-button {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+        }
 
         .add-button:hover {
             transform: translateY(-2px);
         }
 
-        .custom-verbs {
+        .custom-verbs, .custom-nouns {
             margin-top: 20px;
         }
 
-        .custom-verb-tag {
+        .custom-verb-tag, .custom-noun-tag {
             display: inline-block;
             background: #68d391;
             color: white;
@@ -244,14 +263,17 @@
             margin: 4px;
             position: relative;
         }
+        .custom-noun-tag {
+            background: #63b3ed;
+        }
 
-        .remove-verb {
+        .remove-verb, .remove-noun {
             margin-left: 8px;
             cursor: pointer;
             font-weight: bold;
         }
 
-        .toggle-vocab {
+        .toggle-vocab, .toggle-noun {
             background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
             color: white;
             border: none;
@@ -264,8 +286,11 @@
             display: block;
             transition: all 0.3s ease;
         }
+        .toggle-noun {
+            background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
+        }
 
-        .toggle-vocab:hover {
+        .toggle-vocab:hover, .toggle-noun:hover {
             transform: translateY(-2px);
         }
 
@@ -308,7 +333,7 @@
 
         <div class="section">
             <div class="section-title">🎯 Objeto (Object)</div>
-            <div class="word-grid">
+            <div class="word-grid" id="objectGrid">
                 <button class="word-button object" onclick="selectObject('el libro')">el libro</button>
                 <button class="word-button object" onclick="selectObject('la comida')">la comida</button>
                 <button class="word-button object" onclick="selectObject('el español')">el español</button>
@@ -326,7 +351,7 @@
 
         <button class="clear-button" onclick="clearSentence()">🔄 Limpiar Oración</button>
 
-        <button class="toggle-vocab" onclick="toggleVocabSection()">➕ Añadir Vocabulario</button>
+        <button class="toggle-vocab" onclick="toggleVocabSection()">➕ Añadir Verbos</button>
 
         <div class="add-vocab-section hidden" id="vocabSection">
             <div class="add-vocab-title">🌱 Añade tus propios verbos</div>
@@ -355,6 +380,26 @@
             </div>
         </div>
 
+        <button class="toggle-noun" onclick="toggleNounSection()">➕ Añadir Sustantivos</button>
+
+        <div class="add-noun-section hidden" id="nounSection">
+            <div class="add-noun-title">📚 Añade tus propios sustantivos</div>
+            
+            <div class="noun-form">
+                <div class="form-group">
+                    <label class="form-label">Sustantivo</label>
+                    <input type="text" class="form-input noun-input" id="newNoun" placeholder="ej: la casa, el perro, las flores...">
+                </div>
+                
+                <button class="add-button noun-button" onclick="addNewNoun()">➕ Añadir</button>
+            </div>
+
+            <div class="custom-nouns" id="customNouns">
+                <div style="font-weight: 600; color: #2d3748; margin-bottom: 10px;">Sustantivos añadidos:</div>
+            </div>
+        </div>
+
+
         <div class="conjugation-info" id="conjugationInfo" style="display: none;">
             <strong>💡 Información de conjugación:</strong>
             <div id="conjugationDetails"></div>
@@ -366,6 +411,7 @@
         let selectedVerb = null;
         let selectedObject = null;
         let customVerbs = [];
+        let customNouns = []; // New array for custom nouns
 
         // Conjugation engine for regular verbs
         function conjugateRegularVerb(verb, type, subject) {
@@ -443,6 +489,8 @@
             }
         };
 
+        const defaultObjects = ['el libro', 'la comida', 'el español', 'la música', 'el agua', 'la carta', 'el trabajo', 'la película'];
+
         function selectSubject(subject) {
             selectedSubject = subject;
             updateSentence();
@@ -485,8 +533,39 @@
             });
         }
 
+        function updateObjectGrid() {
+            const objectGrid = document.getElementById('objectGrid');
+            
+            // Clear existing objects
+            objectGrid.innerHTML = '';
+            
+            // Add default objects
+            defaultObjects.forEach(object => {
+                const button = document.createElement('button');
+                button.className = 'word-button object';
+                button.textContent = object;
+                button.onclick = () => selectObject(object);
+                objectGrid.appendChild(button);
+            });
+            
+            // Add custom objects
+            customNouns.forEach(noun => {
+                const button = document.createElement('button');
+                button.className = 'word-button object';
+                button.textContent = noun;
+                button.onclick = () => selectObject(noun);
+                button.style.background = 'linear-gradient(135deg, #4299e1 0%, #3182ce 100%)'; // New color for custom nouns
+                objectGrid.appendChild(button);
+            });
+        }
+
         function toggleVocabSection() {
             const section = document.getElementById('vocabSection');
+            section.classList.toggle('hidden');
+        }
+
+        function toggleNounSection() {
+            const section = document.getElementById('nounSection');
             section.classList.toggle('hidden');
         }
 
@@ -538,18 +617,63 @@
             alert(`¡Verbo "${verb}" añadido correctamente!`);
         }
 
+        function addNewNoun() {
+            const nounInput = document.getElementById('newNoun');
+            
+            const noun = nounInput.value.trim().toLowerCase();
+            
+            if (!noun) {
+                alert('Por favor, introduce un sustantivo');
+                return;
+            }
+            
+            // Check if noun already exists
+            if (defaultObjects.includes(noun) || customNouns.includes(noun)) {
+                alert('Este sustantivo ya existe');
+                return;
+            }
+            
+            // Add to custom nouns list
+            customNouns.push(noun);
+            
+            // Update UI
+            updateObjectGrid();
+            updateCustomNounsDisplay();
+            
+            // Clear form
+            nounInput.value = '';
+            
+            alert(`¡Sustantivo "${noun}" añadido correctamente!`);
+        }
+
         function updateCustomVerbsDisplay() {
             const container = document.getElementById('customVerbs');
             const title = container.querySelector('div');
             
-            // Clear existing tags
-            container.innerHTML = '';
-            container.appendChild(title);
+            // Clear existing tags, preserving the title
+            const existingTags = container.querySelectorAll('.custom-verb-tag');
+            existingTags.forEach(tag => tag.remove());
             
             customVerbs.forEach((verbData, index) => {
                 const tag = document.createElement('span');
                 tag.className = 'custom-verb-tag';
                 tag.innerHTML = `${verbData.verb} (${verbData.type}) <span class="remove-verb" onclick="removeCustomVerb(${index})">×</span>`;
+                container.appendChild(tag);
+            });
+        }
+
+        function updateCustomNounsDisplay() {
+            const container = document.getElementById('customNouns');
+            const title = container.querySelector('div');
+
+            // Clear existing tags, preserving the title
+            const existingTags = container.querySelectorAll('.custom-noun-tag');
+            existingTags.forEach(tag => tag.remove());
+            
+            customNouns.forEach((noun, index) => {
+                const tag = document.createElement('span');
+                tag.className = 'custom-noun-tag';
+                tag.innerHTML = `${noun} <span class="remove-noun" onclick="removeCustomNoun(${index})">×</span>`;
                 container.appendChild(tag);
             });
         }
@@ -574,6 +698,23 @@
             }
         }
 
+        function removeCustomNoun(index) {
+            const noun = customNouns[index];
+            
+            // Remove from custom nouns
+            customNouns.splice(index, 1);
+            
+            // Update UI
+            updateObjectGrid();
+            updateCustomNounsDisplay();
+            
+            // Clear selection if it was the removed noun
+            if (selectedObject === noun) {
+                selectedObject = null;
+                updateSentence();
+            }
+        }
+
         function updateSentence() {
             const builder = document.getElementById('sentenceBuilder');
             const info = document.getElementById('conjugationInfo');
@@ -592,20 +733,28 @@
             }
             
             if (selectedVerb && selectedSubject) {
-                const conjugatedVerb = conjugations[selectedVerb][selectedSubject];
-                sentenceHTML += `<span class="sentence-part selected-verb">${conjugatedVerb}</span>`;
-                
-                // Show conjugation info
-                info.style.display = 'block';
-                const verbData = customVerbs.find(v => v.verb === selectedVerb);
-                const verbType = verbData ? `(${verbData.type})` : '(verbo predeterminado)';
-                
-                details.innerHTML = `
-                    <strong>${selectedVerb}</strong> ${verbType} conjugado con <strong>${selectedSubject}</strong> = <strong>${conjugatedVerb}</strong>
-                    <br><small>Presente de indicativo</small>
-                `;
+                const conjugatedVerb = conjugations[selectedVerb]?.[selectedSubject];
+                if (conjugatedVerb) {
+                    sentenceHTML += `<span class="sentence-part selected-verb">${conjugatedVerb}</span>`;
+                    
+                    // Show conjugation info
+                    info.style.display = 'block';
+                    const verbData = customVerbs.find(v => v.verb === selectedVerb);
+                    const verbType = verbData ? `(${verbData.type})` : '(verbo predeterminado)';
+                    
+                    details.innerHTML = `
+                        <strong>${selectedVerb}</strong> ${verbType} conjugado con <strong>${selectedSubject}</strong> = <strong>${conjugatedVerb}</strong>
+                        <br><small>Presente de indicativo</small>
+                    `;
+                } else {
+                    sentenceHTML += `<span class="sentence-part selected-verb">${selectedVerb} (conjugación no disponible)</span>`;
+                    info.style.display = 'none';
+                }
             } else if (selectedVerb) {
                 sentenceHTML += `<span class="sentence-part selected-verb">${selectedVerb} (infinitivo)</span>`;
+                info.style.display = 'none';
+            } else {
+                info.style.display = 'none'; // Hide info if no verb selected or subject is missing for conjugation
             }
             
             if (selectedObject) {
@@ -625,6 +774,14 @@
             selectedObject = null;
             updateSentence();
         }
+
+        // Initialize the grids on load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateVerbGrid();
+            updateObjectGrid();
+            updateCustomVerbsDisplay();
+            updateCustomNounsDisplay();
+        });
     </script>
 </body>
 </html>
