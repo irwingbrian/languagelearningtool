@@ -188,30 +188,61 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.12);
         }
 
-        .subject {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        /* NEW COLOR CODES for word buttons and sentence parts */
+        .verb-button, .verb-part {
+            background: linear-gradient(135deg, #F04A4A 0%, #C82828 100%); /* Red */
+            color: white;
+        }
+        .noun-button, .noun-part {
+            background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%); /* Green */
+            color: white;
+        }
+        .article-button, .article-part {
+            background: linear-gradient(135deg, #FFEB3B 0%, #FBC02D 100%); /* Yellow */
+            color: #333; /* Darker text for yellow */
+        }
+        .pronoun-button, .pronoun-part {
+            background: linear-gradient(135deg, #E91E63 0%, #C2185B 100%); /* Pink */
+            color: white;
+        }
+        .adjective-button, .adjective-part {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%); /* Blue */
+            color: white;
+        }
+        .adverb-button, .adverb-part {
+            background: linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%); /* Purple */
+            color: white;
+        }
+        .preposition-button, .preposition-part {
+            background: linear-gradient(135deg, #795548 0%, #5D4037 100%); /* Brown */
+            color: white;
+        }
+        .conjunction-button, .conjunction-part {
+            background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%); /* Orange */
             color: white;
         }
 
-        .verb {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
+        /* General styles for Mood and Tense (gray) */
+        .mood-tense-section {
+            background: #eceff1; /* Lighter gray for content */
+            border: 1px solid #cfd8dc;
+            box-shadow: none; /* No extra shadow */
+        }
+        .mood-tense-section .collapsible-header {
+            background: #cfd8dc; /* Gray header */
+            color: #455a64;
+            border-bottom: none;
+        }
+        .mood-tense-section .collapsible-header:hover {
+            background-color: #b0bec5;
+        }
+        .mood-tense-section .collapsible-content {
+            background: #eceff1;
+            color: #546e7a;
+            font-style: italic;
+            text-align: center;
         }
 
-        .object { /* Renamed from .object to .noun for consistency with internal data types */
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-        }
-        
-        .preposition {
-            background: linear-gradient(135deg, #81e6d9 0%, #319795 100%);
-            color: white;
-        }
-
-        .connector {
-            background: linear-gradient(135deg, #fbd38d 0%, #dd6b20 100%);
-            color: white;
-        }
 
         .sentence-builder {
             border: none;
@@ -265,12 +296,6 @@
             background-color: #c53030;
         }
 
-        .sentence-part.subject-part { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-        .sentence-part.verb-part { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; }
-        .sentence-part.noun-part { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; }
-        .sentence-part.preposition-part { background: linear-gradient(135deg, #81e6d9 0%, #319795 100%); color: white; }
-        .sentence-part.connector-part { background: linear-gradient(135deg, #fbd38d 0%, #dd6b20 100%); color: white; }
-
         .clear-button {
             background: linear-gradient(135deg, #fc466b 0%, #3f5efb 100%);
             color: white;
@@ -304,76 +329,37 @@
             color: #4a5568;
         }
 
-        /* Existing add vocab/noun sections */
-        .add-vocab-section {
-            background: #f0fff4;
-            border: 2px solid #68d391;
+        /* New single add word section */
+        .add-word-section {
+            background: #f8f9fa; /* Light gray/off-white background */
+            border: 2px dashed #b0bec5; /* Subtle dashed border */
             border-radius: 15px;
             padding: 25px;
-            margin: 30px 0;
+            margin-top: 30px; /* Space from other sections */
         }
-        .add-noun-section {
-            background: #ebf8ff;
-            border: 2px solid #63b3ed;
-            border-radius: 15px;
-            padding: 25px;
-            margin: 30px 0;
-        }
-        /* New add preposition/connector sections */
-        .add-preposition-section {
-            background: #e6fffa;
-            border: 2px solid #38b2ac;
-            border-radius: 15px;
-            padding: 25px;
-            margin: 30px 0;
-        }
-        .add-connector-section {
-            background: #fffaf0;
-            border: 2px solid #ed8936;
-            border-radius: 15px;
-            padding: 25px;
-            margin: 30px 0;
-        }
-
-
-        .add-vocab-title, .add-noun-title, .add-preposition-title, .add-connector-title {
+        .add-word-title {
             font-size: 1.3em;
             font-weight: 600;
             margin-bottom: 20px;
             text-align: center;
+            color: #455a64; /* Darker gray text */
         }
-        .add-vocab-title { color: #2f855a; }
-        .add-noun-title { color: #2b6cb0; }
-        .add-preposition-title { color: #2c7a7b; }
-        .add-connector-title { color: #dd6b20; }
-
-
-        .vocab-form {
+        .add-word-form {
             display: grid;
-            /* Changed from 1fr 1fr auto to just 1fr for single column input field */
-            grid-template-columns: 1fr; /* Single column for input and button below */
+            grid-template-columns: 1fr; /* Single column for input and button */
             gap: 15px;
             align-items: end;
         }
-        .noun-form, .preposition-form, .connector-form { /* Combine similar forms */
-            display: grid;
-            grid-template-columns: 1fr auto; 
-            gap: 15px;
-            align-items: end;
-        }
-
         .form-group {
             display: flex;
             flex-direction: column;
         }
-
         .form-label {
             font-weight: 600;
             color: #2d3748;
             margin-bottom: 8px;
             font-size: 14px;
         }
-
         .form-input {
             padding: 12px;
             border: 2px solid #e2e8f0;
@@ -381,32 +367,12 @@
             font-size: 16px;
             transition: border-color 0.3s ease;
         }
-
         .form-input:focus {
             outline: none;
-            border-color: #68d391; /* Default for verb input */
+            border-color: #607d8b; /* Neutral focus color */
         }
-        .form-input.noun-input:focus {
-            border-color: #63b3ed;
-        }
-        .form-input.preposition-input:focus {
-            border-color: #38b2ac;
-        }
-        .form-input.connector-input:focus {
-            border-color: #ed8936;
-        }
-
-        .form-select {
-            padding: 12px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 16px;
-            background: white;
-            cursor: pointer;
-        }
-
-        .add-button {
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); /* Green for verbs */
+        .add-button-general {
+            background: linear-gradient(135deg, #607d8b 0%, #455a64 100%); /* Gray/blue-gray button */
             color: white;
             border: none;
             padding: 12px 20px;
@@ -415,75 +381,36 @@
             font-weight: 600;
             height: fit-content;
             transition: transform 0.3s ease;
-            width: 100%; /* Make add button full width */
+            width: 100%; /* Full width */
         }
-        .add-button.noun-button {
-            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%); /* Blue for nouns */
-            width: auto; /* Reset width for other forms if needed */
-        }
-        .add-button.preposition-button {
-            background: linear-gradient(135deg, #38b2ac 0%, #2c7a7b 100%); /* Teal for prepositions */
-            width: auto;
-        }
-        .add-button.connector-button {
-            background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%); /* Orange for connectors */
-            width: auto;
-        }
-
-        .add-button:hover {
+        .add-button-general:hover {
             transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.12);
         }
-
-        .custom-verbs, .custom-nouns, .custom-prepositions, .custom-connectors {
+        .custom-word-list { /* For displaying added words */
             margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
         }
-
-        .custom-verb-tag, .custom-noun-tag, .custom-preposition-tag, .custom-connector-tag {
+        .custom-word-list > div {
+            font-weight: 600;
+            color: #2d3748;
+            width: 100%; /* Ensures title takes full width */
+        }
+        .custom-tag { /* General style for custom word tags */
             display: inline-block;
             padding: 6px 12px;
             border-radius: 20px;
             font-size: 12px;
-            margin: 4px;
             position: relative;
-            color: white; /* All tags have white text */
+            color: white;
+            background: #b0bec5; /* Default custom tag color */
         }
-        .custom-verb-tag { background: #68d391; }
-        .custom-noun-tag { background: #63b3ed; }
-        .custom-preposition-tag { background: #38b2ac; }
-        .custom-connector-tag { background: #ed8936; }
-
-
-        .remove-tag { /* Combined remove styles for custom word tags */
+        .custom-tag .remove-tag {
             margin-left: 8px;
             cursor: pointer;
             font-weight: bold;
-        }
-
-        /* Toggle buttons for sections (moved to left panel, used for add-vocab sections) */
-        .toggle-vocab, .toggle-noun, .toggle-preposition, .toggle-connector {
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            margin: 20px auto;
-            display: block;
-            transition: all 0.3s ease;
-        }
-        .toggle-vocab { background: linear-gradient(135deg, #38a169 0%, #2f855a 100%); }
-        .toggle-noun { background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%); }
-        .toggle-preposition { background: linear-gradient(135deg, #38b2ac 0%, #2c7a7b 100%); }
-        .toggle-connector { background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%); }
-
-
-        .toggle-vocab:hover, .toggle-noun:hover, .toggle-preposition:hover, .toggle-connector:hover {
-            transform: translateY(-2px);
-        }
-
-        .hidden {
-            display: none;
         }
     </style>
 </head>
@@ -494,27 +421,29 @@
         <div class="main-layout">
             <div class="left-panel">
                 <div class="collapsible-section">
-                    <div class="collapsible-header">
-                        <span>📍 Sujeto (Subject)</span>
+                    <div class="collapsible-header pronoun-button">
+                        <span>🙋 Pronombres (Pronouns)</span>
                         <span class="icon">►</span>
                     </div>
                     <div class="collapsible-content">
-                        <div class="word-grid">
-                            <button class="word-button subject" onclick="addWordToSentence('subject', 'yo')">yo</button>
-                            <button class="word-button subject" onclick="addWordToSentence('subject', 'tú')">tú</button>
-                            <button class="word-button subject" onclick="addWordToSentence('subject', 'él')">él</button>
-                            <button class="word-button subject" onclick="addWordToSentence('subject', 'ella')">ella</button>
-                            <button class="word-button subject" onclick="addWordToSentence('subject', 'nosotros')">nosotros</button>
-                            <button class="word-button subject" onclick="addWordToSentence('subject', 'ustedes')">ustedes</button>
-                            <button class="word-button subject" onclick="addWordToSentence('subject', 'ellos')">ellos</button>
-                            <button class="word-button subject" onclick="addWordToSentence('subject', 'ellas')">ellas</button>
+                        <div class="word-grid" id="pronounGrid">
+                            <button class="word-button pronoun-button" onclick="addWordToSentence('pronoun', 'yo')">yo</button>
+                            <button class="word-button pronoun-button" onclick="addWordToSentence('pronoun', 'tú')">tú</button>
+                            <button class="word-button pronoun-button" onclick="addWordToSentence('pronoun', 'él')">él</button>
+                            <button class="word-button pronoun-button" onclick="addWordToSentence('pronoun', 'ella')">ella</button>
+                            <button class="word-button pronoun-button" onclick="addWordToSentence('pronoun', 'usted')">usted</button>
+                            <button class="word-button pronoun-button" onclick="addWordToSentence('pronoun', 'nosotros')">nosotros</button>
+                            <button class="word-button pronoun-button" onclick="addWordToSentence('pronoun', 'vosotros')">vosotros</button>
+                            <button class="word-button pronoun-button" onclick="addWordToSentence('pronoun', 'ustedes')">ustedes</button>
+                            <button class="word-button pronoun-button" onclick="addWordToSentence('pronoun', 'ellos')">ellos</button>
+                            <button class="word-button pronoun-button" onclick="addWordToSentence('pronoun', 'ellas')">ellas</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="collapsible-section">
-                    <div class="collapsible-header">
-                        <span>⚡ Verbo (Verb)</span>
+                    <div class="collapsible-header verb-button">
+                        <span>⚡ Verbos (Verbs)</span>
                         <span class="icon">►</span>
                     </div>
                     <div class="collapsible-content">
@@ -524,8 +453,8 @@
                 </div>
 
                 <div class="collapsible-section">
-                    <div class="collapsible-header">
-                        <span>🎯 Sustantivo (Noun)</span>
+                    <div class="collapsible-header noun-button">
+                        <span>🎯 Sustantivos (Nouns)</span>
                         <span class="icon">►</span>
                     </div>
                     <div class="collapsible-content">
@@ -535,8 +464,60 @@
                 </div>
 
                 <div class="collapsible-section">
-                    <div class="collapsible-header">
-                        <span>🔗 Preposiciones (Prepositions)</span>
+                    <div class="collapsible-header article-button">
+                        <span>📝 Artículos (Articles)</span>
+                        <span class="icon">►</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="word-grid" id="articleGrid">
+                            <button class="word-button article-button" onclick="addWordToSentence('article', 'el')">el</button>
+                            <button class="word-button article-button" onclick="addWordToSentence('article', 'la')">la</button>
+                            <button class="word-button article-button" onclick="addWordToSentence('article', 'los')">los</button>
+                            <button class="word-button article-button" onclick="addWordToSentence('article', 'las')">las</button>
+                            <button class="word-button article-button" onclick="addWordToSentence('article', 'un')">un</button>
+                            <button class="word-button article-button" onclick="addWordToSentence('article', 'una')">una</button>
+                            <button class="word-button article-button" onclick="addWordToSentence('article', 'unos')">unos</button>
+                            <button class="word-button article-button" onclick="addWordToSentence('article', 'unas')">unas</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="collapsible-section">
+                    <div class="collapsible-header adjective-button">
+                        <span>✨ Adjetivos (Adjectives)</span>
+                        <span class="icon">►</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="word-grid" id="adjectiveGrid">
+                             <button class="word-button adjective-button" onclick="addWordToSentence('adjective', 'grande')">grande</button>
+                            <button class="word-button adjective-button" onclick="addWordToSentence('adjective', 'pequeño')">pequeño</button>
+                            <button class="word-button adjective-button" onclick="addWordToSentence('adjective', 'feliz')">feliz</button>
+                            <button class="word-button adjective-button" onclick="addWordToSentence('adjective', 'triste')">triste</button>
+                            <button class="word-button adjective-button" onclick="addWordToSentence('adjective', 'bonito')">bonito</button>
+                            <button class="word-button adjective-button" onclick="addWordToSentence('adjective', 'nuevo')">nuevo</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="collapsible-section">
+                    <div class="collapsible-header adverb-button">
+                        <span>💨 Adverbios (Adverbs)</span>
+                        <span class="icon">►</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="word-grid" id="adverbGrid">
+                            <button class="word-button adverb-button" onclick="addWordToSentence('adverb', 'rápidamente')">rápidamente</button>
+                            <button class="word-button adverb-button" onclick="addWordToSentence('adverb', 'lentamente')">lentamente</button>
+                            <button class="word-button adverb-button" onclick="addWordToSentence('adverb', 'muy')">muy</button>
+                            <button class="word-button adverb-button" onclick="addWordToSentence('adverb', 'bien')">bien</button>
+                            <button class="word-button adverb-button" onclick="addWordToSentence('adverb', 'mal')">mal</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="collapsible-section">
+                    <div class="collapsible-header preposition-button">
+                        <span>📍 Preposiciones (Prepositions)</span>
                         <span class="icon">►</span>
                     </div>
                     <div class="collapsible-content">
@@ -546,99 +527,58 @@
                 </div>
 
                 <div class="collapsible-section">
-                    <div class="collapsible-header">
-                        <span>➕ Conectores (Connectors)</span>
+                    <div class="collapsible-header conjunction-button">
+                        <span>➕ Conjunciones (Conjunctions)</span>
                         <span class="icon">►</span>
                     </div>
                     <div class="collapsible-content">
-                        <div class="word-grid" id="connectorGrid">
+                        <div class="word-grid" id="conjunctionGrid">
                             </div>
                     </div>
                 </div>
 
-                <div class="collapsible-section">
+                <div class="collapsible-section mood-tense-section">
                     <div class="collapsible-header">
                         <span>💡 Modo (Mood)</span>
                         <span class="icon">►</span>
                     </div>
                     <div class="collapsible-content">
-                        <p style="text-align: center; color: #6a6a6a; font-style: italic; padding: 10px;">
+                        <p>
                             (Funcionalidad futura: elige el modo del verbo)
                         </p>
                     </div>
                 </div>
 
-                <div class="collapsible-section">
+                <div class="collapsible-section mood-tense-section">
                     <div class="collapsible-header">
                         <span>⏰ Tiempo (Tense)</span>
                         <span class="icon">►</span>
                     </div>
                     <div class="collapsible-content">
-                        <p style="text-align: center; color: #6a6a6a; font-style: italic; padding: 10px;">
+                        <p>
                             (Funcionalidad futura: elige el tiempo verbal)
                         </p>
                     </div>
                 </div>
 
-                <button class="toggle-vocab" onclick="toggleVocabSection()">➕ Añadir Verbos</button>
-                <div class="add-vocab-section hidden" id="vocabSection">
-                    <div class="add-vocab-title">🌱 Añade tus propios verbos</div>
-                    <div class="vocab-form">
+                <div class="add-word-section">
+                    <div class="add-word-title">✍️ Añadir Palabra Personalizada</div>
+                    <div class="add-word-form">
                         <div class="form-group">
-                            <label class="form-label">Verbo (infinitivo)</label>
-                            <input type="text" class="form-input" id="newVerb" placeholder="ej: caminar, correr, salir...">
+                            <label class="form-label">Introduce una palabra</label>
+                            <input type="text" class="form-input" id="newCustomWord" placeholder="ej: sustantivo, verbo, adjetivo...">
                         </div>
-                        <button class="add-button" onclick="addNewVerb()">➕ Añadir Verbo</button>
+                        <button class="add-button-general" onclick="addNewCustomWord()">➕ Añadir</button>
                     </div>
-                    <div class="custom-verbs" id="customVerbs">
-                        <div style="font-weight: 600; color: #2d3748; margin-bottom: 10px;">Verbos añadidos:</div>
-                    </div>
+                    <div class="custom-word-list" id="customWordList">
+                        <div>Palabras añadidas:</div>
+                        </div>
+                     <p style="font-size: 0.8em; color: #666; text-align: center; margin-top: 15px;">
+                        * La clasificación automática es básica. Si la palabra no se clasifica correctamente, se te pedirá que lo confirmes.
+                        La agrupación de sustantivos (ej. "animales") es una característica futura.
+                    </p>
                 </div>
 
-                <button class="toggle-noun" onclick="toggleNounSection()">➕ Añadir Sustantivos</button>
-                <div class="add-noun-section hidden" id="nounSection">
-                    <div class="add-noun-title">📚 Añade tus propios sustantivos</div>
-                    <div class="noun-form">
-                        <div class="form-group">
-                            <label class="form-label">Sustantivo</label>
-                            <input type="text" class="form-input noun-input" id="newNoun" placeholder="ej: la casa, el perro, las flores...">
-                        </div>
-                        <button class="add-button noun-button" onclick="addNewNoun()">➕ Añadir</button>
-                    </div>
-                    <div class="custom-nouns" id="customNouns">
-                        <div style="font-weight: 600; color: #2d3748; margin-bottom: 10px;">Sustantivos añadidos:</div>
-                    </div>
-                </div>
-
-                <button class="toggle-preposition" onclick="togglePrepositionSection()">➕ Añadir Preposiciones</button>
-                <div class="add-preposition-section hidden" id="prepositionSection">
-                    <div class="add-preposition-title">📍 Añade tus propias preposiciones</div>
-                    <div class="preposition-form">
-                        <div class="form-group">
-                            <label class="form-label">Preposición</label>
-                            <input type="text" class="form-input preposition-input" id="newPreposition" placeholder="ej: a, con, de, en...">
-                        </div>
-                        <button class="add-button preposition-button" onclick="addNewPreposition()">➕ Añadir</button>
-                    </div>
-                    <div class="custom-prepositions" id="customPrepositions">
-                        <div style="font-weight: 600; color: #2d3748; margin-bottom: 10px;">Preposiciones añadidas:</div>
-                    </div>
-                </div>
-
-                <button class="toggle-connector" onclick="toggleConnectorSection()">➕ Añadir Conectores</button>
-                <div class="add-connector-section hidden" id="connectorSection">
-                    <div class="add-connector-title">➕ Añade tus propios conectores</div>
-                    <div class="connector-form">
-                        <div class="form-group">
-                            <label class="form-label">Conector</label>
-                            <input type="text" class="form-input connector-input" id="newConnector" placeholder="ej: y, o, pero, aunque...">
-                        </div>
-                        <button class="add-button connector-button" onclick="addNewConnector()">➕ Añadir</button>
-                    </div>
-                    <div class="custom-connectors" id="customConnectors">
-                        <div style="font-weight: 600; color: #2d3748; margin-bottom: 10px;">Conectores añadidos:</div>
-                    </div>
-                </div>
             </div> <div class="right-panel">
                 <div class="sentence-builder" id="sentenceBuilder">
                     <span class="placeholder">Arrastra y suelta palabras aquí para construir tu oración...</span>
@@ -651,28 +591,37 @@
                     <div id="conjugationDetails"></div>
                 </div>
             </div> </div> </div> <script>
-        // Use an array to store the full sentence, allowing flexible order
         let sentenceElements = []; 
 
         let allVerbsData = {}; 
-        let customVerbs = []; 
-        let customNouns = []; 
-        let customPrepositions = []; 
-        let customConnectors = [];   
-
+        
+        // Consolidated custom word storage
+        let customWords = {
+            verbs: [],
+            nouns: [],
+            articles: [],
+            pronouns: [],
+            adjectives: [],
+            adverbs: [],
+            prepositions: [],
+            conjunctions: []
+        };
+        
+        // Default lists for new categories (can be expanded)
+        const defaultPronouns = ['yo', 'tú', 'él', 'ella', 'usted', 'nosotros', 'vosotros', 'ustedes', 'ellos', 'ellas'];
         const defaultNouns = ['el libro', 'la comida', 'el español', 'la música', 'el agua', 'la carta', 'el trabajo', 'la película']; 
+        const defaultArticles = ['el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas'];
+        const defaultAdjectives = ['grande', 'pequeño', 'feliz', 'triste', 'bonito', 'nuevo', 'viejo', 'rápido', 'lento'];
+        const defaultAdverbs = ['rápidamente', 'lentamente', 'muy', 'bien', 'mal', 'siempre', 'nunca', 'aquí', 'allí'];
         const defaultPrepositions = ['a', 'ante', 'bajo', 'con', 'de', 'desde', 'en', 'entre', 'hacia', 'hasta', 'para', 'por', 'según', 'sin', 'sobre', 'tras']; 
-        const defaultConnectors = ['y', 'o', 'pero', 'aunque', 'porque', 'si', 'cuando', 'mientras', 'entonces']; 
+        const defaultConjunctions = ['y', 'o', 'pero', 'aunque', 'porque', 'si', 'cuando', 'mientras', 'entonces']; 
 
         const VERBS_JSON_URL = 'https://raw.githubusercontent.com/irwingbrian/languagelearningtool/refs/heads/main/verbs.json';
 
         // --- localStorage Helper Functions ---
         function saveCustomData() {
             try {
-                localStorage.setItem('customVerbs', JSON.stringify(customVerbs));
-                localStorage.setItem('customNouns', JSON.stringify(customNouns));
-                localStorage.setItem('customPrepositions', JSON.stringify(customPrepositions)); 
-                localStorage.setItem('customConnectors', JSON.stringify(customConnectors));     
+                localStorage.setItem('customWords', JSON.stringify(customWords));
             } catch (e) {
                 console.error("Error saving to localStorage:", e);
                 alert("Error al guardar tus palabras personalizadas. El almacenamiento local podría estar lleno o deshabilitado.");
@@ -681,27 +630,22 @@
 
         function loadCustomData() {
             try {
-                const storedVerbs = localStorage.getItem('customVerbs');
-                const storedNouns = localStorage.getItem('customNouns');
-                const storedPrepositions = localStorage.getItem('customPrepositions'); 
-                const storedConnectors = localStorage.getItem('customConnectors');     
-                
-                if (storedVerbs) customVerbs = JSON.parse(storedVerbs);
-                if (storedNouns) customNouns = JSON.parse(storedNouns);
-                if (storedPrepositions) customPrepositions = JSON.parse(storedPrepositions); 
-                if (storedConnectors) customConnectors = JSON.parse(storedConnectors);     
-
+                const storedWords = localStorage.getItem('customWords');
+                if (storedWords) {
+                    const parsedWords = JSON.parse(storedWords);
+                    // Merge with default structure to ensure all categories exist
+                    Object.keys(customWords).forEach(key => {
+                        if (parsedWords[key]) {
+                            customWords[key] = parsedWords[key];
+                        }
+                    });
+                }
             } catch (e) {
                 console.error("Error loading from localStorage:", e);
                 alert("Error al cargar tus palabras personalizadas. Podrían estar corruptas.");
-                localStorage.removeItem('customVerbs');
-                localStorage.removeItem('customNouns');
-                localStorage.removeItem('customPrepositions'); 
-                localStorage.removeItem('customConnectors');     
-                customVerbs = [];
-                customNouns = [];
-                customPrepositions = []; 
-                customConnectors = [];   
+                localStorage.removeItem('customWords'); // Clear corrupted data
+                // Reset to empty arrays if corrupted
+                Object.keys(customWords).forEach(key => customWords[key] = []);
             }
         }
 
@@ -714,7 +658,7 @@
                 }
                 const data = await response.json();
                 allVerbsData = data; 
-                updateVerbGrid(); 
+                updateGrids(); // Update all grids after fetching data
             } catch (error) {
                 console.error("Could not fetch verbs data:", error);
                 alert("Error al cargar los verbos predeterminados. Verifica la URL del JSON o tu conexión a internet.");
@@ -728,15 +672,15 @@
             const endings = {
                 'regular-ar': {
                     'yo': 'o', 'tú': 'as', 'él': 'a', 'ella': 'a', 'usted': 'a', 
-                    'nosotros': 'amos', 'ustedes': 'an', 'ellos': 'an', 'ellas': 'an' 
+                    'nosotros': 'amos', 'vosotros': 'áis', 'ustedes': 'an', 'ellos': 'an', 'ellas': 'an' 
                 },
                 'regular-er': {
                     'yo': 'o', 'tú': 'es', 'él': 'e', 'ella': 'e', 'usted': 'e',
-                    'nosotros': 'emos', 'ustedes': 'en', 'ellos': 'en', 'ellas': 'en' 
+                    'nosotros': 'emos', 'vosotros': 'éis', 'ustedes': 'en', 'ellos': 'en', 'ellas': 'en' 
                 },
                 'regular-ir': {
                     'yo': 'o', 'tú': 'es', 'él': 'e', 'ella': 'e', 'usted': 'e',
-                    'nosotros': 'imos', 'ustedes': 'en', 'ellos': 'en', 'ellas': 'en' 
+                    'nosotros': 'imos', 'vosotros': 'ís', 'ustedes': 'en', 'ellos': 'en', 'ellas': 'en' 
                 }
             };
             return stem + endings[type][subject];
@@ -744,7 +688,7 @@
 
         function generateConjugation(verb, type) {
             const conjugation = {};
-            const subjects = ['yo', 'tú', 'él', 'ella', 'usted', 'nosotros', 'ustedes', 'ellos', 'ellas']; 
+            const subjects = ['yo', 'tú', 'él', 'ella', 'usted', 'nosotros', 'vosotros', 'ustedes', 'ellos', 'ellas']; 
             
             subjects.forEach(subject => {
                 conjugation[subject] = conjugateRegularVerb(verb, type, subject);
@@ -764,23 +708,32 @@
             updateSentence();
         }
 
-        // --- Grid Update Functions ---
+        // --- Grid Update Functions (Combined) ---
+        function updateGrids() {
+            updateVerbGrid(); 
+            updateNounGrid(); 
+            updatePronounGrid();
+            updateArticleGrid();
+            updateAdjectiveGrid();
+            updateAdverbGrid();
+            updatePrepositionGrid(); 
+            updateConjunctionGrid();
+            updateCustomWordsDisplay(); // Update the consolidated custom word list
+        }
+
         function updateVerbGrid() {
             const verbGrid = document.getElementById('verbGrid');
             verbGrid.innerHTML = ''; 
 
             const allVerbsToDisplay = { ...allVerbsData }; 
-            customVerbs.forEach(verbData => {
-                // Ensure custom verbs (especially irregular ones without conjugations from input)
-                // get basic conjugation placeholders if they don't have full data.
+            customWords.verbs.forEach(verbData => {
                 if (!verbData.conjugations) {
                     if (verbData.type !== 'irregular') {
                          verbData.conjugations = generateConjugation(verbData.verb, verbData.type);
                     } else {
-                        // For irregular custom verbs without specific conjugations, use a placeholder
                         verbData.conjugations = {
                             'yo': `${verbData.verb}*`, 'tú': `${verbData.verb}*`, 'él': `${verbData.verb}*`, 'ella': `${verbData.verb}*`, 'usted': `${verbData.verb}*`,
-                            'nosotros': `${verbData.verb}*`, 'ustedes': `${verbData.verb}*`, 'ellos': `${verbData.verb}*`, 'ellas': `${verbData.verb}*` 
+                            'nosotros': `${verbData.verb}*`, 'vosotros': `${verbData.verb}*`, 'ustedes': `${verbData.verb}*`, 'ellos': `${verbData.verb}*`, 'ellas': `${verbData.verb}*` 
                         };
                     }
                 }
@@ -791,18 +744,18 @@
 
             verbInfinitives.forEach(verb => {
                 const button = document.createElement('button');
-                button.className = 'word-button verb';
+                button.className = 'word-button verb-button'; // New class for verbs
                 button.textContent = verb;
                 button.onclick = () => addWordToSentence('verb', verb); 
                 
                 const verbInfo = allVerbsToDisplay[verb];
 
-                if (customVerbs.some(v => v.verb === verb)) {
-                    button.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)'; // Custom verb color
+                // Override color for custom or irregular verbs if desired
+                if (customWords.verbs.some(v => v.verb === verb)) {
+                    // Custom verbs can have a distinct shade of red if desired, or just use the general verb-button
+                    button.style.background = 'linear-gradient(135deg, #FF6F6F 0%, #D03939 100%)'; 
                 } else if (verbInfo.type === 'irregular') {
-                    button.style.background = 'linear-gradient(135deg, #e07a5f 0%, #a43a3d 100%)'; // Irregular verb color
-                } else {
-                    button.style.background = 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'; // Default regular verb color
+                    button.style.background = 'linear-gradient(135deg, #C82828 0%, #A01B1B 100%)'; // Darker red for irregular
                 }
                 
                 verbGrid.appendChild(button);
@@ -813,17 +766,81 @@
             const nounGrid = document.getElementById('nounGrid'); 
             nounGrid.innerHTML = ''; 
             
-            const allNounsToDisplay = [...defaultNouns, ...customNouns].sort(); 
+            const allNounsToDisplay = [...defaultNouns, ...customWords.nouns].sort(); 
 
             allNounsToDisplay.forEach(noun => {
                 const button = document.createElement('button');
-                button.className = 'word-button noun'; 
+                button.className = 'word-button noun-button'; // New class for nouns
                 button.textContent = noun;
                 button.onclick = () => addWordToSentence('noun', noun); 
-                if (customNouns.includes(noun)) {
-                    button.style.background = 'linear-gradient(135deg, #4299e1 0%, #3182ce 100%)';
+                if (customWords.nouns.includes(noun)) {
+                    button.style.background = 'linear-gradient(135deg, #66BB6A 0%, #2E7D32 100%)'; // Custom noun shade
                 }
                 nounGrid.appendChild(button);
+            });
+        }
+
+        function updatePronounGrid() {
+            const pronounGrid = document.getElementById('pronounGrid');
+            pronounGrid.innerHTML = ''; // Clear existing
+            const allPronounsToDisplay = [...defaultPronouns, ...customWords.pronouns].sort();
+            allPronounsToDisplay.forEach(pronoun => {
+                const button = document.createElement('button');
+                button.className = 'word-button pronoun-button';
+                button.textContent = pronoun;
+                button.onclick = () => addWordToSentence('pronoun', pronoun);
+                if (customWords.pronouns.includes(pronoun)) {
+                     button.style.background = 'linear-gradient(135deg, #FF4081 0%, #AD1457 100%)'; // Custom pronoun shade
+                }
+                pronounGrid.appendChild(button);
+            });
+        }
+
+        function updateArticleGrid() {
+            const articleGrid = document.getElementById('articleGrid');
+            articleGrid.innerHTML = ''; 
+            const allArticlesToDisplay = [...defaultArticles, ...customWords.articles].sort();
+            allArticlesToDisplay.forEach(article => {
+                const button = document.createElement('button');
+                button.className = 'word-button article-button';
+                button.textContent = article;
+                button.onclick = () => addWordToSentence('article', article);
+                if (customWords.articles.includes(article)) {
+                    button.style.background = 'linear-gradient(135deg, #FFD54F 0%, #FFB300 100%)'; // Custom article shade
+                }
+                articleGrid.appendChild(button);
+            });
+        }
+
+        function updateAdjectiveGrid() {
+            const adjectiveGrid = document.getElementById('adjectiveGrid');
+            adjectiveGrid.innerHTML = ''; 
+            const allAdjectivesToDisplay = [...defaultAdjectives, ...customWords.adjectives].sort();
+            allAdjectivesToDisplay.forEach(adjective => {
+                const button = document.createElement('button');
+                button.className = 'word-button adjective-button';
+                button.textContent = adjective;
+                button.onclick = () => addWordToSentence('adjective', adjective);
+                if (customWords.adjectives.includes(adjective)) {
+                     button.style.background = 'linear-gradient(135deg, #64B5F6 0%, #1565C0 100%)'; // Custom adjective shade
+                }
+                adjectiveGrid.appendChild(button);
+            });
+        }
+
+        function updateAdverbGrid() {
+            const adverbGrid = document.getElementById('adverbGrid');
+            adverbGrid.innerHTML = ''; 
+            const allAdverbsToDisplay = [...defaultAdverbs, ...customWords.adverbs].sort();
+            allAdverbsToDisplay.forEach(adverb => {
+                const button = document.createElement('button');
+                button.className = 'word-button adverb-button';
+                button.textContent = adverb;
+                button.onclick = () => addWordToSentence('adverb', adverb);
+                if (customWords.adverbs.includes(adverb)) {
+                     button.style.background = 'linear-gradient(135deg, #BA68C8 0%, #6A1B9A 100%)'; // Custom adverb shade
+                }
+                adverbGrid.appendChild(button);
             });
         }
 
@@ -831,267 +848,185 @@
             const prepositionGrid = document.getElementById('prepositionGrid');
             prepositionGrid.innerHTML = ''; 
             
-            const allPrepositionsToDisplay = [...defaultPrepositions, ...customPrepositions].sort();
+            const allPrepositionsToDisplay = [...defaultPrepositions, ...customWords.prepositions].sort();
 
             allPrepositionsToDisplay.forEach(preposition => {
                 const button = document.createElement('button');
-                button.className = 'word-button preposition';
+                button.className = 'word-button preposition-button'; // New class
                 button.textContent = preposition;
                 button.onclick = () => addWordToSentence('preposition', preposition); 
-                if (customPrepositions.includes(preposition)) {
-                    button.style.background = 'linear-gradient(135deg, #38b2ac 0%, #2c7a7b 100%)';
+                if (customWords.prepositions.includes(preposition)) {
+                    button.style.background = 'linear-gradient(135deg, #A1887F 0%, #4E342E 100%)'; // Custom preposition shade
                 }
                 prepositionGrid.appendChild(button);
             });
         }
 
-        function updateConnectorGrid() { 
-            const connectorGrid = document.getElementById('connectorGrid');
-            connectorGrid.innerHTML = ''; 
+        function updateConjunctionGrid() { 
+            const conjunctionGrid = document.getElementById('conjunctionGrid');
+            conjunctionGrid.innerHTML = ''; 
             
-            const allConnectorsToDisplay = [...defaultConnectors, ...customConnectors].sort();
+            const allConjunctionsToDisplay = [...defaultConjunctions, ...customWords.conjunctions].sort();
 
-            allConnectorsToDisplay.forEach(connector => {
+            allConjunctionsToDisplay.forEach(conjunction => {
                 const button = document.createElement('button');
-                button.className = 'word-button connector';
-                button.textContent = connector;
-                button.onclick = () => addWordToSentence('connector', connector); 
-                if (customConnectors.includes(connector)) {
-                    button.style.background = 'linear-gradient(135deg, #ed8936 0%, #dd6b20 100%)';
+                button.className = 'word-button conjunction-button'; // New class
+                button.textContent = conjunction;
+                button.onclick = () => addWordToSentence('conjunction', conjunction); 
+                if (customWords.conjunctions.includes(conjunction)) {
+                    button.style.background = 'linear-gradient(135deg, #FFB74D 0%, #E65100 100%)'; // Custom conjunction shade
                 }
-                connectorGrid.appendChild(button);
+                conjunctionGrid.appendChild(button);
             });
         }
 
-        // --- Section Toggle Functions ---
-        function toggleVocabSection() {
-            document.getElementById('vocabSection').classList.toggle('hidden');
-        }
 
-        function toggleNounSection() {
-            document.getElementById('nounSection').classList.toggle('hidden');
-        }
-        
-        function togglePrepositionSection() { 
-            document.getElementById('prepositionSection').classList.toggle('hidden');
-        }
-
-        function toggleConnectorSection() { 
-            document.getElementById('connectorSection').classList.toggle('hidden');
-        }
-
-        // --- Add/Remove Vocabulary Functions ---
-        function addNewVerb() {
-            const verbInput = document.getElementById('newVerb');
-            const verb = verbInput.value.trim().toLowerCase();
+        // --- Add/Remove Custom Word Functions (Consolidated) ---
+        function addNewCustomWord() {
+            const wordInput = document.getElementById('newCustomWord');
+            const word = wordInput.value.trim().toLowerCase();
             
-            if (!verb) {
-                alert('Por favor, introduce un verbo.');
-                return;
-            }
-            
-            if (allVerbsData[verb] || customVerbs.some(v => v.verb === verb)) {
-                alert('Este verbo ya existe en la lista predeterminada o en tus verbos personalizados.');
+            if (!word) {
+                alert('Por favor, introduce una palabra para añadir.');
                 return;
             }
 
-            let verbType;
-            let conjugations = {};
+            // Basic Classification Logic
+            let classifiedType = null;
 
-            // Automatic type detection for new verbs
-            if (verb.endsWith('ar')) {
-                verbType = 'regular-ar';
-                conjugations = generateConjugation(verb, verbType);
-            } else if (verb.endsWith('er')) {
-                verbType = 'regular-er';
-                conjugations = generateConjugation(verb, verbType);
-            } else if (verb.endsWith('ir')) {
-                verbType = 'regular-ir';
-                conjugations = generateConjugation(verb, verbType);
+            // 1. Check if it's a known preposition
+            if (defaultPrepositions.includes(word) || customWords.prepositions.includes(word)) {
+                classifiedType = 'preposition';
+            } 
+            // 2. Check if it's a known conjunction
+            else if (defaultConjunctions.includes(word) || customWords.conjunctions.includes(word)) {
+                classifiedType = 'conjunction';
+            }
+            // 3. Check if it's a known article
+            else if (defaultArticles.includes(word) || customWords.articles.includes(word)) {
+                classifiedType = 'article';
+            }
+            // 4. Check if it's a known pronoun
+            else if (defaultPronouns.includes(word) || customWords.pronouns.includes(word)) {
+                classifiedType = 'pronoun';
+            }
+            // 5. Check if it's a verb (based on ending or existing data)
+            else if (word.endsWith('ar') || word.endsWith('er') || word.endsWith('ir')) {
+                // If it ends in ar/er/ir, assume regular unless explicitly irregular in allVerbsData
+                let verbType = `regular-${word.slice(-2)}`;
+                if (allVerbsData[word] && allVerbsData[word].type === 'irregular') {
+                    verbType = 'irregular';
+                }
+                classifiedType = 'verb';
+                
+                // Add verb with its type and conjugations
+                if (customWords.verbs.some(v => v.verb === word) || allVerbsData[word]) {
+                    alert('Este verbo ya existe en la lista.');
+                    return;
+                }
+                let conjugations = {};
+                if (verbType !== 'irregular') {
+                    conjugations = generateConjugation(word, verbType);
+                } else {
+                    // Placeholder for irregular verbs
+                    conjugations = {
+                        'yo': `${word}*`, 'tú': `${word}*`, 'él': `${word}*`, 'ella': `${word}*`, 'usted': `${word}*`,
+                        'nosotros': `${word}*`, 'vosotros': `${word}*`, 'ustedes': `${word}*`, 'ellos': `${word}*`, 'ellas': `${word}*` 
+                    };
+                }
+                customWords.verbs.push({ verb: word, type: verbType, conjugations });
+                saveCustomData();
+                updateGrids();
+                alert(`"${word}" clasificado como: Verbo (${verbType}) y añadido.`);
+                wordInput.value = '';
+                return; // Exit after adding verb
+            }
+            // 6. Check if it's a known noun (simple check for "el/la/los/las " prefix)
+            else if (word.startsWith('el ') || word.startsWith('la ') || word.startsWith('los ') || word.startsWith('las ')) {
+                classifiedType = 'noun';
+            }
+            // 7. Check if it's a known adjective
+            else if (defaultAdjectives.includes(word) || customWords.adjectives.includes(word)) {
+                classifiedType = 'adjective';
+            }
+            // 8. Check if it's a known adverb
+            else if (defaultAdverbs.includes(word) || customWords.adverbs.includes(word)) {
+                classifiedType = 'adverb';
+            }
+            
+            // If classification is ambiguous or new, prompt user
+            if (!classifiedType) {
+                const choice = prompt(`No pude clasificar automáticamente "${word}". ¿Qué tipo de palabra es? (verb, noun, article, pronoun, adjective, adverb, preposition, conjunction)`);
+                if (choice) {
+                    const normalizedChoice = choice.trim().toLowerCase();
+                    const validTypes = Object.keys(customWords); // Get valid categories
+                    if (validTypes.includes(normalizedChoice)) {
+                        classifiedType = normalizedChoice;
+                    } else {
+                        alert(`Tipo de palabra inválido: "${choice}". Por favor, usa uno de: ${validTypes.join(', ')}.`);
+                        return;
+                    }
+                } else {
+                    alert('Operación cancelada. No se añadió la palabra.');
+                    return;
+                }
+            }
+
+            // Add to the specific customWords array if not a verb (verbs handled above)
+            if (classifiedType !== 'verb') {
+                if (customWords[classifiedType] && !customWords[classifiedType].includes(word)) {
+                    customWords[classifiedType].push(word);
+                    saveCustomData();
+                    updateGrids();
+                    alert(`"${word}" clasificado como: ${classifiedType} y añadido.`);
+                } else {
+                    alert(`"${word}" ya existe en la categoría "${classifiedType}".`);
+                }
+            }
+            
+            wordInput.value = '';
+        }
+
+        // --- Update Consolidated Custom Word Display ---
+        function updateCustomWordsDisplay() {
+            const container = document.getElementById('customWordList');
+            // Keep the "Palabras añadidas:" title
+            while (container.children.length > 1) { 
+                container.removeChild(container.lastChild);
+            }
+            
+            // Iterate through all custom word categories
+            Object.keys(customWords).forEach(type => {
+                customWords[type].forEach((word, index) => {
+                    const tag = document.createElement('span');
+                    tag.className = `custom-tag ${type}-button`; // Apply color class
+                    
+                    let displayWord = word;
+                    if (type === 'verbs' && typeof word === 'object') { // For verb objects
+                        displayWord = `${word.verb} (${word.type})`;
+                    }
+                    
+                    tag.innerHTML = `${displayWord} <span class="remove-tag" onclick="removeCustomWord('${type}', ${index})">×</span>`;
+                    container.appendChild(tag);
+                });
+            });
+        }
+
+        function removeCustomWord(type, index) {
+            let removedWord;
+            if (type === 'verbs') { // Verbs are objects
+                removedWord = customWords.verbs[index].verb;
+                customWords.verbs.splice(index, 1);
             } else {
-                // If ending is not -ar, -er, -ir, assume irregular
-                verbType = 'irregular';
-                const confirmation = confirm(`"${verb}" no termina en -ar, -er, o -ir. Se clasificará como "Irregular". Necesitarás gestionar sus conjugaciones si la herramienta avanza. ¿Deseas añadirlo de todos modos?`);
-                if (!confirmation) {
-                    return; 
-                }
-                // For irregular custom verbs without specific conjugations, use a placeholder
-                conjugations = {
-                    'yo': `${verb}*`, 'tú': `${verb}*`, 'él': `${verb}*`, 'ella': `${verb}*`, 'usted': `${verb}*`,
-                    'nosotros': `${verb}*`, 'ustedes': `${verb}*`, 'ellos': `${verb}*`, 'ellas': `${verb}*` 
-                };
+                removedWord = customWords[type][index];
+                customWords[type].splice(index, 1);
             }
             
-            customVerbs.push({ verb, type: verbType, conjugations });
             saveCustomData(); 
-            
-            updateVerbGrid();
-            updateCustomVerbsDisplay();
-            
-            verbInput.value = '';
-            
-            alert(`¡Verbo "${verb}" (tipo: ${verbType}) añadido correctamente!`);
-        }
+            updateGrids(); // Re-render all grids
 
-        function addNewNoun() {
-            const nounInput = document.getElementById('newNoun');
-            const noun = nounInput.value.trim().toLowerCase();
-            
-            if (!noun) {
-                alert('Por favor, introduce un sustantivo');
-                return;
-            }
-            
-            if (defaultNouns.includes(noun) || customNouns.includes(noun)) {
-                alert('Este sustantivo ya existe');
-                return;
-            }
-            
-            customNouns.push(noun);
-            saveCustomData(); 
-            
-            updateNounGrid(); 
-            updateCustomNounsDisplay();
-            
-            nounInput.value = '';
-            
-            alert(`¡Sustantivo "${noun}" añadido correctamente!`);
-        }
-        
-        function addNewPreposition() { 
-            const prepositionInput = document.getElementById('newPreposition');
-            const preposition = prepositionInput.value.trim().toLowerCase();
-
-            if (!preposition) {
-                alert('Por favor, introduce una preposición.');
-                return;
-            }
-            if (defaultPrepositions.includes(preposition) || customPrepositions.includes(preposition)) {
-                alert('Esta preposición ya existe.');
-                return;
-            }
-            
-            customPrepositions.push(preposition);
-            saveCustomData();
-            updatePrepositionGrid();
-            updateCustomPrepositionsDisplay();
-            prepositionInput.value = '';
-            alert(`¡Preposición "${preposition}" añadida correctamente!`);
-        }
-
-        function addNewConnector() { 
-            const connectorInput = document.getElementById('newConnector');
-            const connector = connectorInput.value.trim().toLowerCase();
-
-            if (!connector) {
-                alert('Por favor, introduce un conector.');
-                return;
-            }
-            if (defaultConnectors.includes(connector) || customConnectors.includes(connector)) {
-                alert('Este conector ya existe.');
-                return;
-            }
-            
-            customConnectors.push(connector);
-            saveCustomData();
-            updateConnectorGrid();
-            updateCustomConnectorsDisplay();
-            connectorInput.value = '';
-            alert(`¡Conector "${connector}" añadido correctamente!`);
-        }
-
-        function updateCustomVerbsDisplay() {
-            const container = document.getElementById('customVerbs');
-            while (container.children.length > 1) { // Keep the title div
-                container.removeChild(container.lastChild);
-            }
-            
-            customVerbs.forEach((verbData, index) => {
-                const tag = document.createElement('span');
-                tag.className = 'custom-verb-tag';
-                // Display type for custom verbs
-                tag.innerHTML = `${verbData.verb} (${verbData.type}) <span class="remove-tag" onclick="removeCustomVerb(${index})">×</span>`;
-                container.appendChild(tag);
-            });
-        }
-
-        function updateCustomNounsDisplay() {
-            const container = document.getElementById('customNouns');
-            while (container.children.length > 1) { // Keep the title div
-                container.removeChild(container.lastChild);
-            }
-            
-            customNouns.forEach((noun, index) => {
-                const tag = document.createElement('span');
-                tag.className = 'custom-noun-tag';
-                tag.innerHTML = `${noun} <span class="remove-tag" onclick="removeCustomNoun(${index})">×</span>`;
-                container.appendChild(tag);
-            });
-        }
-
-        function updateCustomPrepositionsDisplay() { 
-            const container = document.getElementById('customPrepositions');
-            while (container.children.length > 1) { // Keep the title div
-                container.removeChild(container.lastChild);
-            }
-            customPrepositions.forEach((preposition, index) => {
-                const tag = document.createElement('span');
-                tag.className = 'custom-preposition-tag';
-                tag.innerHTML = `${preposition} <span class="remove-tag" onclick="removeCustomPreposition(${index})">×</span>`;
-                container.appendChild(tag);
-            });
-        }
-
-        function updateCustomConnectorsDisplay() { 
-            const container = document.getElementById('customConnectors');
-            while (container.children.length > 1) { // Keep the title div
-                container.removeChild(container.lastChild);
-            }
-            customConnectors.forEach((connector, index) => {
-                const tag = document.createElement('span');
-                tag.className = 'custom-connector-tag';
-                tag.innerHTML = `${connector} <span class="remove-tag" onclick="removeCustomConnector(${index})">×</span>`;
-                container.appendChild(tag);
-            });
-        }
-
-        function removeCustomVerb(index) {
-            const verbData = customVerbs[index];
-            customVerbs.splice(index, 1);
-            saveCustomData(); 
-            updateVerbGrid();
-            updateCustomVerbsDisplay();
-            sentenceElements = sentenceElements.filter(el => !(el.type === 'verb' && el.value === verbData.verb));
-            updateSentence();
-        }
-
-        function removeCustomNoun(index) {
-            const noun = customNouns[index];
-            customNouns.splice(index, 1);
-            saveCustomData(); 
-            updateNounGrid(); 
-            updateCustomNounsDisplay();
-            sentenceElements = sentenceElements.filter(el => !(el.type === 'noun' && el.value === noun));
-            updateSentence();
-        }
-
-        function removeCustomPreposition(index) { 
-            const preposition = customPrepositions[index];
-            customPrepositions.splice(index, 1);
-            saveCustomData();
-            updatePrepositionGrid();
-            updateCustomPrepositionsDisplay();
-            sentenceElements = sentenceElements.filter(el => !(el.type === 'preposition' && el.value === preposition));
-            updateSentence();
-        }
-
-        function removeCustomConnector(index) { 
-            const connector = customConnectors[index];
-            customConnectors.splice(index, 1);
-            saveCustomData();
-            updateConnectorGrid();
-            updateCustomConnectorsDisplay();
-            sentenceElements = sentenceElements.filter(el => !(el.type === 'connector' && el.value === connector));
+            // Filter out the removed word from the sentence if it was present
+            sentenceElements = sentenceElements.filter(el => !(el.type === type && el.value === removedWord));
             updateSentence();
         }
 
@@ -1109,7 +1044,7 @@
                 return;
             }
 
-            let lastSubject = null;
+            let lastPronoun = null; // Changed from lastSubject to lastPronoun for clarity
             
             sentenceElements.forEach((element, index) => {
                 const span = document.createElement('span');
@@ -1119,38 +1054,50 @@
                 let className = '';
 
                 switch (element.type) {
-                    case 'subject':
-                        className = 'subject-part';
-                        lastSubject = element.value; 
+                    case 'pronoun':
+                        className = 'pronoun-part';
+                        lastPronoun = element.value; 
                         break;
                     case 'verb':
                         className = 'verb-part';
-                        if (lastSubject) {
-                            const verbEntry = customVerbs.find(v => v.verb === element.value) || allVerbsData[element.value];
-                            if (verbEntry && verbEntry.conjugations && verbEntry.conjugations[lastSubject]) {
-                                displayValue = verbEntry.conjugations[lastSubject];
+                        if (lastPronoun) {
+                            // Find verb entry from either allVerbsData or customWords.verbs
+                            const verbEntry = allVerbsData[element.value] || customWords.verbs.find(v => v.verb === element.value);
+                            
+                            if (verbEntry && verbEntry.conjugations && verbEntry.conjugations[lastPronoun]) {
+                                displayValue = verbEntry.conjugations[lastPronoun];
                                 info.style.display = 'block';
-                                const verbTypeDisplay = (verbEntry.type === 'irregular' || verbEntry.type === 'placeholder') ? 'irregular' : `regular -${element.value.slice(-2)}`;
+                                const verbTypeDisplay = (verbEntry.type === 'irregular' || verbEntry.type === 'placeholder') ? 'Irregular' : `Regular -${element.value.slice(-2)}`;
                                 details.innerHTML = `
-                                    <strong>${element.value}</strong> (${verbTypeDisplay}) conjugado con <strong>${lastSubject}</strong> = <strong>${displayValue}</strong>
-                                    <br><small>Presente de indicativo</small>
+                                    <strong>${element.value}</strong> (Tipo: ${verbTypeDisplay}) conjugado con <strong>${lastPronoun}</strong> = <strong>${displayValue}</strong>
+                                    <br><small>Tiempo: Presente de indicativo</small>
                                 `;
                             } else {
-                                // Fallback for verbs without full conjugations (e.g., placeholder irregulars)
-                                displayValue = `${element.value}* (conjugación no disponible)`;
+                                displayValue = `${element.value} (no conjugado)`; 
+                                info.style.display = 'none'; // Hide info if cannot conjugate
                             }
                         } else {
                             displayValue = `${element.value} (infinitivo)`; 
+                            info.style.display = 'none'; // Hide info if no subject
                         }
                         break;
                     case 'noun': 
                         className = 'noun-part';
                         break;
+                    case 'article':
+                        className = 'article-part';
+                        break;
+                    case 'adjective':
+                        className = 'adjective-part';
+                        break;
+                    case 'adverb':
+                        className = 'adverb-part';
+                        break;
                     case 'preposition':
                         className = 'preposition-part';
                         break;
-                    case 'connector':
-                        className = 'connector-part';
+                    case 'conjunction':
+                        className = 'conjunction-part';
                         break;
                 }
 
@@ -1185,14 +1132,17 @@
                     const content = this.nextElementSibling;
                     const icon = this.querySelector('.icon');
                     
-                    // Close all other open sections
-                    headers.forEach(otherHeader => {
-                        if (otherHeader !== this && otherHeader.classList.contains('active')) {
-                            otherHeader.classList.remove('active');
-                            otherHeader.nextElementSibling.classList.remove('active');
-                            otherHeader.querySelector('.icon').style.transform = 'rotate(0deg)'; // Reset icon
-                        }
-                    });
+                    // Close all other open sections within the same parent
+                    const parent = this.closest('.left-panel');
+                    if (parent) {
+                        parent.querySelectorAll('.collapsible-header').forEach(otherHeader => {
+                            if (otherHeader !== this && otherHeader.classList.contains('active')) {
+                                otherHeader.classList.remove('active');
+                                otherHeader.nextElementSibling.classList.remove('active');
+                                otherHeader.querySelector('.icon').style.transform = 'rotate(0deg)'; 
+                            }
+                        });
+                    }
 
                     // Toggle current section
                     this.classList.toggle('active');
@@ -1210,16 +1160,10 @@
         // Initialize the grids and fetch data on load
         document.addEventListener('DOMContentLoaded', () => {
             loadCustomData(); 
-            fetchVerbsData(); 
-            updateNounGrid(); 
-            updatePrepositionGrid(); 
-            updateConnectorGrid();   
-            updateCustomVerbsDisplay(); 
-            updateCustomNounsDisplay();
-            updateCustomPrepositionsDisplay(); 
-            updateCustomConnectorsDisplay();   
-
-            setupCollapsibles(); // Initialize collapsible behavior
+            fetchVerbsData(); // Fetches verbs and then calls updateGrids
+            
+            // setupCollapsibles should be called after all initial HTML is in place
+            setupCollapsibles(); 
 
             // Initialize Sortable.js
             new Sortable(document.getElementById('sentenceBuilder'), {
@@ -1232,7 +1176,7 @@
                 }
             });
 
-            // Optionally, open the first collapsible section by default
+            // Open the first collapsible section by default
             const firstHeader = document.querySelector('.collapsible-header');
             if (firstHeader) {
                 firstHeader.click();
