@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spanish Sentence Builder</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2d3748;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #4a5568;
+        }
+
+        .word-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .word-button {
+            padding: 12px 16px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .word-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .subject {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .verb {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .object {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .sentence-builder {
+            background: #f7fafc;
+            border: 2px dashed #cbd5e0;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin: 30px 0;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .sentence-part {
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            min-width: 80px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .selected-subject {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .selected-verb {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .selected-object {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .clear-button {
+            background: linear-gradient(135deg, #fc466b 0%, #3f5efb 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 20px auto;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .clear-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .placeholder {
+            color: #a0aec0;
+            font-style: italic;
+        }
+
+        .conjugation-info {
+            background: #edf2f7;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #4a5568;
+        }
+
+        .add-vocab-section {
+            background: #f0fff4;
+            border: 2px solid #68d391;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .add-vocab-title {
+            color: #2f855a;
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .vocab-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 15px;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-input {
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #68d391;
+        }
+
+        .form-select {
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .add-button {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            height: fit-content;
+            transition: transform 0.3s ease;
+        }
+
+        .add-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .custom-verbs {
+            margin-top: 20px;
+        }
+
+        .custom-verb-tag {
+            display: inline-block;
+            background: #68d391;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin: 4px;
+            position: relative;
+        }
+
+        .remove-verb {
+            margin-left: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .toggle-vocab {
+            background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 20px auto;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-vocab:hover {
+            transform: translateY(-2px);
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌟 Constructor de Oraciones en Español</h1>
+        
+        <div class="section">
+            <div class="section-title">📍 Sujeto (Subject)</div>
+            <div class="word-grid">
+                <button class="word-button subject" onclick="selectSubject('yo')">yo</button>
+                <button class="word-button subject" onclick="selectSubject('tú')">tú</button>
+                <button class="word-button subject" onclick="selectSubject('él')">él</button>
+                <button class="word-button subject" onclick="selectSubject('ella')">ella</button>
+                <button class="word-button subject" onclick="selectSubject('nosotros')">nosotros</button>
+                <button class="word-button subject" onclick="selectSubject('vosotros')">vosotros</button>
+                <button class="word-button subject" onclick="selectSubject('ellos')">ellos</button>
+                <button class="word-button subject" onclick="selectSubject('ellas')">ellas</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">⚡ Verbo (Verb)</div>
+            <div class="word-grid">
+                <button class="word-button verb" onclick="selectVerb('hablar')">hablar</button>
+                <button class="word-button verb" onclick="selectVerb('comer')">comer</button>
+                <button class="word-button verb" onclick="selectVerb('vivir')">vivir</button>
+                <button class="word-button verb" onclick="selectVerb('estudiar')">estudiar</button>
+                <button class="word-button verb" onclick="selectVerb('trabajar')">trabajar</button>
+                <button class="word-button verb" onclick="selectVerb('beber')">beber</button>
+                <button class="word-button verb" onclick="selectVerb('escribir')">escribir</button>
+                <button class="word-button verb" onclick="selectVerb('leer')">leer</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">🎯 Objeto (Object)</div>
+            <div class="word-grid">
+                <button class="word-button object" onclick="selectObject('el libro')">el libro</button>
+                <button class="word-button object" onclick="selectObject('la comida')">la comida</button>
+                <button class="word-button object" onclick="selectObject('el español')">el español</button>
+                <button class="word-button object" onclick="selectObject('la música')">la música</button>
+                <button class="word-button object" onclick="selectObject('el agua')">el agua</button>
+                <button class="word-button object" onclick="selectObject('la carta')">la carta</button>
+                <button class="word-button object" onclick="selectObject('el trabajo')">el trabajo</button>
+                <button class="word-button object" onclick="selectObject('la película')">la película</button>
+            </div>
+        </div>
+
+        <div class="sentence-builder" id="sentenceBuilder">
+            <span class="placeholder">Selecciona las palabras para construir tu oración...</span>
+        </div>
+
+        <button class="clear-button" onclick="clearSentence()">🔄 Limpiar Oración</button>
+
+        <button class="toggle-vocab" onclick="toggleVocabSection()">➕ Añadir Vocabulario</button>
+
+        <div class="add-vocab-section hidden" id="vocabSection">
+            <div class="add-vocab-title">🌱 Añade tus propios verbos</div>
+            
+            <div class="vocab-form">
+                <div class="form-group">
+                    <label class="form-label">Verbo (infinitivo)</label>
+                    <input type="text" class="form-input" id="newVerb" placeholder="ej: caminar, correr, salir...">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Tipo de verbo</label>
+                    <select class="form-select" id="verbType">
+                        <option value="regular-ar">Regular -AR (como hablar)</option>
+                        <option value="regular-er">Regular -ER (como comer)</option>
+                        <option value="regular-ir">Regular -IR (como vivir)</option>
+                        <option value="irregular">Irregular (necesita conjugaciones especiales)</option>
+                    </select>
+                </div>
+                
+                <button class="add-button" onclick="addNewVerb()">➕ Añadir</button>
+            </div>
+
+            <div class="custom-verbs" id="customVerbs">
+                <div style="font-weight: 600; color: #2d3748; margin-bottom: 10px;">Verbos añadidos:</div>
+            </div>
+        </div>
+
+        <div class="conjugation-info" id="conjugationInfo" style="display: none;">
+            <strong>💡 Información de conjugación:</strong>
+            <div id="conjugationDetails"></div>
+        </div>
+    </div>
+
+    <script>
+        let selectedSubject = null;
+        let selectedVerb = null;
+        let selectedObject = null;
+        let customVerbs = [];
+
+        // Conjugation engine for regular verbs
+        function conjugateRegularVerb(verb, type, subject) {
+            const stem = verb.slice(0, -2); // Remove -ar, -er, or -ir
+            
+            const endings = {
+                'regular-ar': {
+                    'yo': 'o', 'tú': 'as', 'él': 'a', 'ella': 'a',
+                    'nosotros': 'amos', 'vosotros': 'áis', 'ellos': 'an', 'ellas': 'an'
+                },
+                'regular-er': {
+                    'yo': 'o', 'tú': 'es', 'él': 'e', 'ella': 'e',
+                    'nosotros': 'emos', 'vosotros': 'éis', 'ellos': 'en', 'ellas': 'en'
+                },
+                'regular-ir': {
+                    'yo': 'o', 'tú': 'es', 'él': 'e', 'ella': 'e',
+                    'nosotros': 'imos', 'vosotros': 'ís', 'ellos': 'en', 'ellas': 'en'
+                }
+            };
+
+            return stem + endings[type][subject];
+        }
+
+        // Generate full conjugation for a verb
+        function generateConjugation(verb, type) {
+            if (type === 'irregular') {
+                // For irregular verbs, we'd need user input or a database
+                // For now, return a placeholder
+                return {
+                    'yo': `${verb}*`, 'tú': `${verb}*`, 'él': `${verb}*`, 'ella': `${verb}*`,
+                    'nosotros': `${verb}*`, 'vosotros': `${verb}*`, 'ellos': `${verb}*`, 'ellas': `${verb}*`
+                };
+            }
+
+            const conjugation = {};
+            const subjects = ['yo', 'tú', 'él', 'ella', 'nosotros', 'vosotros', 'ellos', 'ellas'];
+            
+            subjects.forEach(subject => {
+                conjugation[subject] = conjugateRegularVerb(verb, type, subject);
+            });
+
+            return conjugation;
+        }
+
+        const conjugations = {
+            'hablar': {
+                'yo': 'hablo',
+                'tú': 'hablas',
+                'él': 'habla',
+                'ella': 'habla',
+                'nosotros': 'hablamos',
+                'vosotros': 'habláis',
+                'ellos': 'hablan',
+                'ellas': 'hablan'
+            },
+            'comer': {
+                'yo': 'como',
+                'tú': 'comes',
+                'él': 'come',
+                'ella': 'come',
+                'nosotros': 'comemos',
+                'vosotros': 'coméis',
+                'ellos': 'comen',
+                'ellas': 'comen'
+            },
+            'vivir': {
+                'yo': 'vivo',
+                'tú': 'vives',
+                'él': 'vive',
+                'ella': 'vive',
+                'nosotros': 'vivimos',
+                'vosotros': 'vivís',
+                'ellos': 'viven',
+                'ellas': 'viven'
+            },
+            'estudiar': {
+                'yo': 'estudio',
+                'tú': 'estudias',
+                'él': 'estudia',
+                'ella': 'estudia',
+                'nosotros': 'estudiamos',
+                'vosotros': 'estudiáis',
+                'ellos': 'estudian',
+                'ellas': 'estudian'
+            },
+            'trabajar': {
+                'yo': 'trabajo',
+                'tú': 'trabajas',
+                'él': 'trabaja',
+                'ella': 'trabaja',
+                'nosotros': 'trabajamos',
+                'vosotros': 'trabajáis',
+                'ellos': 'trabajan',
+                'ellas': 'trabajan'
+            },
+            'beber': {
+                'yo': 'bebo',
+                'tú': 'bebes',
+                'él': 'bebe',
+                'ella': 'bebe',
+                'nosotros': 'bebemos',
+                'vosotros': 'bebéis',
+                'ellos': 'beben',
+                'ellas': 'beben'
+            },
+            'escribir': {
+                'yo': 'escribo',
+                'tú': 'escribes',
+                'él': 'escribe',
+                'ella': 'escribe',
+                'nosotros': 'escribimos',
+                'vosotros': 'escribís',
+                'ellos': 'escriben',
+                'ellas': 'escriben'
+            },
+            'leer': {
+                'yo': 'leo',
+                'tú': 'lees',
+                'él': 'lee',
+                'ella': 'lee',
+                'nosotros': 'leemos',
+                'vosotros': 'leéis',
+                'ellos': 'leen',
+                'ellas': 'leen'
+            }
+        };
+
+        function selectSubject(subject) {
+            selectedSubject = subject;
+            updateSentence();
+        }
+
+        function selectVerb(verb) {
+            selectedVerb = verb;
+            updateSentence();
+        }
+
+        function selectObject(object) {
+            selectedObject = object;
+            updateSentence();
+        }
+
+        function updateVerbGrid() {
+            const verbGrid = document.querySelector('.section:nth-child(2) .word-grid');
+            
+            // Clear existing verbs
+            verbGrid.innerHTML = '';
+            
+            // Add default verbs
+            const defaultVerbs = ['hablar', 'comer', 'vivir', 'estudiar', 'trabajar', 'beber', 'escribir', 'leer'];
+            defaultVerbs.forEach(verb => {
+                const button = document.createElement('button');
+                button.className = 'word-button verb';
+                button.textContent = verb;
+                button.onclick = () => selectVerb(verb);
+                verbGrid.appendChild(button);
+            });
+            
+            // Add custom verbs
+            customVerbs.forEach(verbData => {
+                const button = document.createElement('button');
+                button.className = 'word-button verb';
+                button.textContent = verbData.verb;
+                button.onclick = () => selectVerb(verbData.verb);
+                button.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)'; // Green gradient for custom
+                verbGrid.appendChild(button);
+            });
+        }
+
+        function toggleVocabSection() {
+            const section = document.getElementById('vocabSection');
+            section.classList.toggle('hidden');
+        }
+
+        function addNewVerb() {
+            const verbInput = document.getElementById('newVerb');
+            const typeSelect = document.getElementById('verbType');
+            
+            const verb = verbInput.value.trim().toLowerCase();
+            const type = typeSelect.value;
+            
+            if (!verb) {
+                alert('Por favor, introduce un verbo');
+                return;
+            }
+            
+            // Check if verb already exists
+            if (conjugations[verb] || customVerbs.some(v => v.verb === verb)) {
+                alert('Este verbo ya existe');
+                return;
+            }
+            
+            // Validate verb ending
+            const validEndings = {
+                'regular-ar': 'ar',
+                'regular-er': 'er', 
+                'regular-ir': 'ir'
+            };
+            
+            if (type !== 'irregular' && !verb.endsWith(validEndings[type])) {
+                alert(`Los verbos ${type} deben terminar en -${validEndings[type]}`);
+                return;
+            }
+            
+            // Generate conjugation and add to system
+            const newConjugation = generateConjugation(verb, type);
+            conjugations[verb] = newConjugation;
+            
+            // Add to custom verbs list
+            customVerbs.push({ verb, type });
+            
+            // Update UI
+            updateVerbGrid();
+            updateCustomVerbsDisplay();
+            
+            // Clear form
+            verbInput.value = '';
+            typeSelect.value = 'regular-ar';
+            
+            alert(`¡Verbo "${verb}" añadido correctamente!`);
+        }
+
+        function updateCustomVerbsDisplay() {
+            const container = document.getElementById('customVerbs');
+            const title = container.querySelector('div');
+            
+            // Clear existing tags
+            container.innerHTML = '';
+            container.appendChild(title);
+            
+            customVerbs.forEach((verbData, index) => {
+                const tag = document.createElement('span');
+                tag.className = 'custom-verb-tag';
+                tag.innerHTML = `${verbData.verb} (${verbData.type}) <span class="remove-verb" onclick="removeCustomVerb(${index})">×</span>`;
+                container.appendChild(tag);
+            });
+        }
+
+        function removeCustomVerb(index) {
+            const verbData = customVerbs[index];
+            
+            // Remove from conjugations
+            delete conjugations[verbData.verb];
+            
+            // Remove from custom verbs
+            customVerbs.splice(index, 1);
+            
+            // Update UI
+            updateVerbGrid();
+            updateCustomVerbsDisplay();
+            
+            // Clear selection if it was the removed verb
+            if (selectedVerb === verbData.verb) {
+                selectedVerb = null;
+                updateSentence();
+            }
+        }
+        function updateVerbGrid() {
+            const verbGrid = document.querySelector('.section:nth-child(2) .word-grid');
+            
+            // Clear existing verbs
+            verbGrid.innerHTML = '';
+            
+            // Add default verbs
+            const defaultVerbs = ['hablar', 'comer', 'vivir', 'estudiar', 'trabajar', 'beber', 'escribir', 'leer'];
+            defaultVerbs.forEach(verb => {
+                const button = document.createElement('button');
+                button.className = 'word-button verb';
+                button.textContent = verb;
+                button.onclick = () => selectVerb(verb);
+                verbGrid.appendChild(button);
+            });
+            
+            // Add custom verbs
+            customVerbs.forEach(verbData => {
+                const button = document.createElement('button');
+                button.className = 'word-button verb';
+                button.textContent = verbData.verb;
+                button.onclick = () => selectVerb(verbData.verb);
+                button.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)'; // Green gradient for custom
+                verbGrid.appendChild(button);
+            });
+        }
+
+        function toggleVocabSection() {
+            const section = document.getElementById('vocabSection');
+            section.classList.toggle('hidden');
+        }
+
+        function addNewVerb() {
+            const verbInput = document.getElementById('newVerb');
+            const typeSelect = document.getElementById('verbType');
+            
+            const verb = verbInput.value.trim().toLowerCase();
+            const type = typeSelect.value;
+            
+            if (!verb) {
+                alert('Por favor, introduce un verbo');
+                return;
+            }
+            
+            // Check if verb already exists
+            if (conjugations[verb] || customVerbs.some(v => v.verb === verb)) {
+                alert('Este verbo ya existe');
+                return;
+            }
+            
+            // Validate verb ending
+            const validEndings = {
+                'regular-ar': 'ar',
+                'regular-er': 'er', 
+                'regular-ir': 'ir'
+            };
+            
+            if (type !== 'irregular' && !verb.endsWith(validEndings[type])) {
+                alert(`Los verbos ${type} deben terminar en -${validEndings[type]}`);
+                return;
+            }
+            
+            // Generate conjugation and add to system
+            const newConjugation = generateConjugation(verb, type);
+            conjugations[verb] = newConjugation;
+            
+            // Add to custom verbs list
+            customVerbs.push({ verb, type });
+            
+            // Update UI
+            updateVerbGrid();
+            updateCustomVerbsDisplay();
+            
+            // Clear form
+            verbInput.value = '';
+            typeSelect.value = 'regular-ar';
+            
+            alert(`¡Verbo "${verb}" añadido correctamente!`);
+        }
+
+        function updateCustomVerbsDisplay() {
+            const container = document.getElementById('customVerbs');
+            const title = container.querySelector('div');
+            
+            // Clear existing tags
+            container.innerHTML = '';
+            container.appendChild(title);
+            
+            customVerbs.forEach((verbData, index) => {
+                const tag = document.createElement('span');
+                tag.className = 'custom-verb-tag';
+                tag.innerHTML = `${verbData.verb} (${verbData.type}) <span class="remove-verb" onclick="removeCustomVerb(${index})">×</span>`;
+                container.appendChild(tag);
+            });
+        }
+
+        function removeCustomVerb(index) {
+            const verbData = customVerbs[index];
+            
+            // Remove from conjugations
+            delete conjugations[verbData.verb];
+            
+            // Remove from custom verbs
+            customVerbs.splice(index, 1);
+            
+            // Update UI
+            updateVerbGrid();
+            updateCustomVerbsDisplay();
+            
+            // Clear selection if it was the removed verb
+            if (selectedVerb === verbData.verb) {
+                selectedVerb = null;
+                updateSentence();
+            }
+        }
+
+        function updateSentence() {
+            const builder = document.getElementById('sentenceBuilder');
+            const info = document.getElementById('conjugationInfo');
+            const details = document.getElementById('conjugationDetails');
+            
+            if (!selectedSubject && !selectedVerb && !selectedObject) {
+                builder.innerHTML = '<span class="placeholder">Selecciona las palabras para construir tu oración...</span>';
+                info.style.display = 'none';
+                return;
+            }
+
+            let sentenceHTML = '';
+            
+            if (selectedSubject) {
+                sentenceHTML += `<span class="sentence-part selected-subject">${selectedSubject}</span>`;
+            }
+            
+            if (selectedVerb && selectedSubject) {
+                const conjugatedVerb = conjugations[selectedVerb][selectedSubject];
+                sentenceHTML += `<span class="sentence-part selected-verb">${conjugatedVerb}</span>`;
+                
+                // Show conjugation info
+                info.style.display = 'block';
+                const verbData = customVerbs.find(v => v.verb === selectedVerb);
+                const verbType = verbData ? `(${verbData.type})` : '(verbo predeterminado)';
+                
+                details.innerHTML = `
+                    <strong>${selectedVerb}</strong> ${verbType} conjugado con <strong>${selectedSubject}</strong> = <strong>${conjugatedVerb}</strong>
+                    <br><small>Presente de indicativo</small>
+                `;
+            } else if (selectedVerb) {
+                sentenceHTML += `<span class="sentence-part selected-verb">${selectedVerb} (infinitivo)</span>`;
+            }
+            
+            if (selectedObject) {
+                sentenceHTML += `<span class="sentence-part selected-object">${selectedObject}</span>`;
+            }
+
+            if (sentenceHTML) {
+                builder.innerHTML = sentenceHTML;
+            } else {
+                builder.innerHTML = '<span class="placeholder">Selecciona las palabras para construir tu oración...</span>';
+            }
+        }
+        }
+
+        function clearSentence() {
+            selectedSubject = null;
+            selectedVerb = null;
+            selectedObject = null;
+            updateSentence();
+        }
+    </script>
+</body>
+</html>
