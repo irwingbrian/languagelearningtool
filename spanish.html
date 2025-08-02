@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spanish Sentence Builder</title>
     <style>
+        /* Your existing CSS */
         * {
             margin: 0;
             padding: 0;
@@ -83,6 +84,17 @@
             background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             color: white;
         }
+        
+        /* New styles for prepositions and connectors */
+        .preposition {
+            background: linear-gradient(135deg, #81e6d9 0%, #319795 100%);
+            color: white;
+        }
+
+        .connector {
+            background: linear-gradient(135deg, #fbd38d 0%, #dd6b20 100%);
+            color: white;
+        }
 
         .sentence-builder {
             background: #f7fafc;
@@ -123,6 +135,18 @@
             background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             color: white;
         }
+        
+        /* New styles for selected prepositions and connectors */
+        .selected-preposition {
+            background: linear-gradient(135deg, #81e6d9 0%, #319795 100%);
+            color: white;
+        }
+
+        .selected-connector {
+            background: linear-gradient(135deg, #fbd38d 0%, #dd6b20 100%);
+            color: white;
+        }
+
 
         .clear-button {
             background: linear-gradient(135deg, #fc466b 0%, #3f5efb 100%);
@@ -157,6 +181,7 @@
             color: #4a5568;
         }
 
+        /* Existing add vocab/noun sections */
         .add-vocab-section {
             background: #f0fff4;
             border: 2px solid #68d391;
@@ -171,26 +196,46 @@
             padding: 25px;
             margin: 30px 0;
         }
+        /* New add preposition/connector sections */
+        .add-preposition-section {
+            background: #e6fffa;
+            border: 2px solid #38b2ac;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+        .add-connector-section {
+            background: #fffaf0;
+            border: 2px solid #ed8936;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+        }
 
-        .add-vocab-title, .add-noun-title {
-            color: #2f855a;
+
+        .add-vocab-title, .add-noun-title, .add-preposition-title, .add-connector-title {
             font-size: 1.3em;
             font-weight: 600;
             margin-bottom: 20px;
             text-align: center;
         }
-        .add-noun-title {
-            color: #2b6cb0;
-        }
+        .add-vocab-title { color: #2f855a; }
+        .add-noun-title { color: #2b6cb0; }
+        .add-preposition-title { color: #2c7a7b; }
+        .add-connector-title { color: #dd6b20; }
 
-        .vocab-form, .noun-form {
+
+        .vocab-form {
             display: grid;
             grid-template-columns: 1fr 1fr auto;
             gap: 15px;
             align-items: end;
         }
-        .noun-form {
-            grid-template-columns: 1fr auto; /* Nouns don't have a 'type' select */
+        .noun-form, .preposition-form, .connector-form { /* Combine similar forms */
+            display: grid;
+            grid-template-columns: 1fr auto; 
+            gap: 15px;
+            align-items: end;
         }
 
         .form-group {
@@ -215,10 +260,16 @@
 
         .form-input:focus {
             outline: none;
-            border-color: #68d391;
+            border-color: #68d391; /* Default for verb input */
         }
         .form-input.noun-input:focus {
             border-color: #63b3ed;
+        }
+        .form-input.preposition-input:focus {
+            border-color: #38b2ac;
+        }
+        .form-input.connector-input:focus {
+            border-color: #ed8936;
         }
 
         .form-select {
@@ -231,7 +282,7 @@
         }
 
         .add-button {
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); /* Green for verbs */
             color: white;
             border: none;
             padding: 12px 20px;
@@ -242,39 +293,46 @@
             transition: transform 0.3s ease;
         }
         .add-button.noun-button {
-            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%); /* Blue for nouns */
+        }
+        .add-button.preposition-button {
+            background: linear-gradient(135deg, #38b2ac 0%, #2c7a7b 100%); /* Teal for prepositions */
+        }
+        .add-button.connector-button {
+            background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%); /* Orange for connectors */
         }
 
         .add-button:hover {
             transform: translateY(-2px);
         }
 
-        .custom-verbs, .custom-nouns {
+        .custom-verbs, .custom-nouns, .custom-prepositions, .custom-connectors {
             margin-top: 20px;
         }
 
-        .custom-verb-tag, .custom-noun-tag {
+        .custom-verb-tag, .custom-noun-tag, .custom-preposition-tag, .custom-connector-tag {
             display: inline-block;
-            background: #68d391;
-            color: white;
             padding: 6px 12px;
             border-radius: 20px;
             font-size: 12px;
             margin: 4px;
             position: relative;
+            color: white; /* All tags have white text */
         }
-        .custom-noun-tag {
-            background: #63b3ed;
-        }
+        .custom-verb-tag { background: #68d391; }
+        .custom-noun-tag { background: #63b3ed; }
+        .custom-preposition-tag { background: #38b2ac; }
+        .custom-connector-tag { background: #ed8936; }
 
-        .remove-verb, .remove-noun {
+
+        .remove-verb, .remove-noun, .remove-preposition, .remove-connector {
             margin-left: 8px;
             cursor: pointer;
             font-weight: bold;
         }
 
-        .toggle-vocab, .toggle-noun {
-            background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+        /* Toggle buttons for sections */
+        .toggle-vocab, .toggle-noun, .toggle-preposition, .toggle-connector {
             color: white;
             border: none;
             padding: 12px 24px;
@@ -286,11 +344,13 @@
             display: block;
             transition: all 0.3s ease;
         }
-        .toggle-noun {
-            background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
-        }
+        .toggle-vocab { background: linear-gradient(135deg, #38a169 0%, #2f855a 100%); }
+        .toggle-noun { background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%); }
+        .toggle-preposition { background: linear-gradient(135deg, #38b2ac 0%, #2c7a7b 100%); }
+        .toggle-connector { background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%); }
 
-        .toggle-vocab:hover, .toggle-noun:hover {
+
+        .toggle-vocab:hover, .toggle-noun:hover, .toggle-preposition:hover, .toggle-connector:hover {
             transform: translateY(-2px);
         }
 
@@ -326,6 +386,18 @@
         <div class="section">
             <div class="section-title">🎯 Objeto (Object)</div>
             <div class="word-grid" id="objectGrid">
+                </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">🔗 Preposiciones (Prepositions)</div>
+            <div class="word-grid" id="prepositionGrid">
+                </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">➕ Conectores (Connectors)</div>
+            <div class="word-grid" id="connectorGrid">
                 </div>
         </div>
 
@@ -383,6 +455,36 @@
             </div>
         </div>
 
+        <button class="toggle-preposition" onclick="togglePrepositionSection()">➕ Añadir Preposiciones</button>
+        <div class="add-preposition-section hidden" id="prepositionSection">
+            <div class="add-preposition-title">📍 Añade tus propias preposiciones</div>
+            <div class="preposition-form">
+                <div class="form-group">
+                    <label class="form-label">Preposición</label>
+                    <input type="text" class="form-input preposition-input" id="newPreposition" placeholder="ej: a, con, de, en...">
+                </div>
+                <button class="add-button preposition-button" onclick="addNewPreposition()">➕ Añadir</button>
+            </div>
+            <div class="custom-prepositions" id="customPrepositions">
+                <div style="font-weight: 600; color: #2d3748; margin-bottom: 10px;">Preposiciones añadidas:</div>
+            </div>
+        </div>
+
+        <button class="toggle-connector" onclick="toggleConnectorSection()">➕ Añadir Conectores</button>
+        <div class="add-connector-section hidden" id="connectorSection">
+            <div class="add-connector-title">➕ Añade tus propios conectores</div>
+            <div class="connector-form">
+                <div class="form-group">
+                    <label class="form-label">Conector</label>
+                    <input type="text" class="form-input connector-input" id="newConnector" placeholder="ej: y, o, pero, aunque...">
+                </div>
+                <button class="add-button connector-button" onclick="addNewConnector()">➕ Añadir</button>
+            </div>
+            <div class="custom-connectors" id="customConnectors">
+                <div style="font-weight: 600; color: #2d3748; margin-bottom: 10px;">Conectores añadidos:</div>
+            </div>
+        </div>
+
 
         <div class="conjugation-info" id="conjugationInfo" style="display: none;">
             <strong>💡 Información de conjugación:</strong>
@@ -394,22 +496,30 @@
         let selectedSubject = null;
         let selectedVerb = null;
         let selectedObject = null;
+        let selectedPreposition = null; // NEW
+        let selectedConnector = null;   // NEW
+
         let allVerbsData = {}; 
         let customVerbs = []; 
         let customNouns = []; 
+        let customPrepositions = []; // NEW
+        let customConnectors = [];   // NEW
 
         const defaultObjects = ['el libro', 'la comida', 'el español', 'la música', 'el agua', 'la carta', 'el trabajo', 'la película'];
+        const defaultPrepositions = ['a', 'ante', 'bajo', 'con', 'de', 'desde', 'en', 'entre', 'hacia', 'hasta', 'para', 'por', 'según', 'sin', 'sobre', 'tras']; // NEW
+        const defaultConnectors = ['y', 'o', 'pero', 'aunque', 'porque', 'si', 'cuando', 'mientras', 'entonces']; // NEW
 
         // !! IMPORTANT !!
         // Replace this with the RAW URL of your verbs.json file on GitHub
         const VERBS_JSON_URL = 'https://raw.githubusercontent.com/irwingbrian/languagelearningtool/refs/heads/main/verbs.json';
-        // Example: 'https://raw.githubusercontent.com/Gemini-AI/spanish-tool-data/main/verbs.json';
 
         // --- localStorage Helper Functions ---
         function saveCustomData() {
             try {
                 localStorage.setItem('customVerbs', JSON.stringify(customVerbs));
                 localStorage.setItem('customNouns', JSON.stringify(customNouns));
+                localStorage.setItem('customPrepositions', JSON.stringify(customPrepositions)); // NEW
+                localStorage.setItem('customConnectors', JSON.stringify(customConnectors));     // NEW
             } catch (e) {
                 console.error("Error saving to localStorage:", e);
                 alert("Error al guardar tus palabras personalizadas. El almacenamiento local podría estar lleno o deshabilitado.");
@@ -420,21 +530,26 @@
             try {
                 const storedVerbs = localStorage.getItem('customVerbs');
                 const storedNouns = localStorage.getItem('customNouns');
+                const storedPrepositions = localStorage.getItem('customPrepositions'); // NEW
+                const storedConnectors = localStorage.getItem('customConnectors');     // NEW
                 
-                if (storedVerbs) {
-                    customVerbs = JSON.parse(storedVerbs);
-                }
-                if (storedNouns) {
-                    customNouns = JSON.parse(storedNouns);
-                }
+                if (storedVerbs) customVerbs = JSON.parse(storedVerbs);
+                if (storedNouns) customNouns = JSON.parse(storedNouns);
+                if (storedPrepositions) customPrepositions = JSON.parse(storedPrepositions); // NEW
+                if (storedConnectors) customConnectors = JSON.parse(storedConnectors);     // NEW
+
             } catch (e) {
                 console.error("Error loading from localStorage:", e);
                 alert("Error al cargar tus palabras personalizadas. Podrían estar corruptas.");
                 // Clear potentially bad data
                 localStorage.removeItem('customVerbs');
                 localStorage.removeItem('customNouns');
+                localStorage.removeItem('customPrepositions'); // NEW
+                localStorage.removeItem('customConnectors');     // NEW
                 customVerbs = [];
                 customNouns = [];
+                customPrepositions = []; // NEW
+                customConnectors = [];   // NEW
             }
         }
 
@@ -450,9 +565,7 @@
                 updateVerbGrid(); 
             } catch (error) {
                 console.error("Could not fetch verbs data:", error);
-                alert("Error loading verb data. Please check the JSON URL or your internet connection. Default verbs might not be available.");
-                // Optionally, fall back to some default hardcoded verbs if fetch fails
-                // For now, we'll just proceed with an empty allVerbsData if fetch fails.
+                alert("Error al cargar los verbos predeterminados. Verifica la URL del JSON o tu conexión a internet.");
             }
         }
 
@@ -477,19 +590,11 @@
             return stem + endings[type][subject];
         }
 
-        // This function is new or significantly modified from previous steps.
-        // It's responsible for generating the full conjugation for a regular verb
-        // based on its type (-ar, -er, -ir) and creating the structure expected
-        // by the allVerbsData object.
         function generateConjugation(verb, type) {
             const conjugation = {};
             const subjects = ['yo', 'tú', 'él', 'ella', 'usted', 'nosotros', 'ustedes', 'ellos', 'ellas']; 
             
             subjects.forEach(subject => {
-                // 'ustedes' uses the same conjugation ending as 'ellos' and 'ellas' for regular verbs in Latin American Spanish
-                const effectiveSubject = (subject === 'ustedes' || subject === 'usted') ? 'ellos' : subject; // This line might need refinement if 'usted' conjugates like 'él'/'ella'
-                // Re-evaluate how 'usted' is handled here. For regular verbs, 'usted' is 'a' for -ar, 'e' for -er/-ir.
-                // It should follow 'él'/'ella'. Let's ensure the regular conjugation uses `subject` directly.
                 conjugation[subject] = conjugateRegularVerb(verb, type, subject);
             });
 
@@ -512,6 +617,16 @@
             updateSentence();
         }
 
+        function selectPreposition(preposition) { // NEW
+            selectedPreposition = preposition;
+            updateSentence();
+        }
+
+        function selectConnector(connector) { // NEW
+            selectedConnector = connector;
+            updateSentence();
+        }
+
         // --- Grid Update Functions ---
         function updateVerbGrid() {
             const verbGrid = document.getElementById('verbGrid');
@@ -519,11 +634,10 @@
 
             const allVerbsToDisplay = { ...allVerbsData }; 
             customVerbs.forEach(verbData => {
-                // Ensure custom regular verbs have their full conjugations generated
                 if (verbData.type !== 'irregular' && !verbData.conjugations) {
                     verbData.conjugations = generateConjugation(verbData.verb, verbData.type);
                 }
-                allVerbsToDisplay[verbData.verb] = verbData; // Add/overwrite with custom verbs
+                allVerbsToDisplay[verbData.verb] = verbData; 
             });
 
             const verbInfinitives = Object.keys(allVerbsToDisplay).sort();
@@ -562,15 +676,57 @@
             });
         }
 
+        function updatePrepositionGrid() { // NEW
+            const prepositionGrid = document.getElementById('prepositionGrid');
+            prepositionGrid.innerHTML = ''; 
+            
+            const allPrepositionsToDisplay = [...defaultPrepositions, ...customPrepositions].sort();
+
+            allPrepositionsToDisplay.forEach(preposition => {
+                const button = document.createElement('button');
+                button.className = 'word-button preposition';
+                button.textContent = preposition;
+                button.onclick = () => selectPreposition(preposition);
+                if (customPrepositions.includes(preposition)) {
+                    button.style.background = 'linear-gradient(135deg, #38b2ac 0%, #2c7a7b 100%)';
+                }
+                prepositionGrid.appendChild(button);
+            });
+        }
+
+        function updateConnectorGrid() { // NEW
+            const connectorGrid = document.getElementById('connectorGrid');
+            connectorGrid.innerHTML = ''; 
+            
+            const allConnectorsToDisplay = [...defaultConnectors, ...customConnectors].sort();
+
+            allConnectorsToDisplay.forEach(connector => {
+                const button = document.createElement('button');
+                button.className = 'word-button connector';
+                button.textContent = connector;
+                button.onclick = () => selectConnector(connector);
+                if (customConnectors.includes(connector)) {
+                    button.style.background = 'linear-gradient(135deg, #ed8936 0%, #dd6b20 100%)';
+                }
+                connectorGrid.appendChild(button);
+            });
+        }
+
         // --- Section Toggle Functions ---
         function toggleVocabSection() {
-            const section = document.getElementById('vocabSection');
-            section.classList.toggle('hidden');
+            document.getElementById('vocabSection').classList.toggle('hidden');
         }
 
         function toggleNounSection() {
-            const section = document.getElementById('nounSection');
-            section.classList.toggle('hidden');
+            document.getElementById('nounSection').classList.toggle('hidden');
+        }
+        
+        function togglePrepositionSection() { // NEW
+            document.getElementById('prepositionSection').classList.toggle('hidden');
+        }
+
+        function toggleConnectorSection() { // NEW
+            document.getElementById('connectorSection').classList.toggle('hidden');
         }
 
         // --- Add/Remove Vocabulary Functions ---
@@ -592,9 +748,7 @@
             }
             
             const validEndings = {
-                'regular-ar': 'ar',
-                'regular-er': 'er', 
-                'regular-ir': 'ir'
+                'regular-ar': 'ar', 'regular-er': 'er', 'regular-ir': 'ir'
             };
             
             if (type !== 'irregular' && !verb.endsWith(validEndings[type])) {
@@ -607,7 +761,6 @@
             if (type === 'irregular') {
                 const confirmation = confirm(`Has seleccionado "Irregular" para "${verb}". Necesitas añadir sus conjugaciones manualmente. ¿Deseas añadirlo como un verbo irregular genérico por ahora? (Usará infinitivo con asterisco)`);
                 if (confirmation) {
-                    // Note: For custom irregular verbs, 'ustedes' conjugation would need to be manually specified if different from 'ellos/ellas'
                     verbData.conjugations = {
                         'yo': `${verb}*`, 'tú': `${verb}*`, 'él': `${verb}*`, 'ella': `${verb}*`, 'usted': `${verb}*`,
                         'nosotros': `${verb}*`, 'ustedes': `${verb}*`, 'ellos': `${verb}*`, 'ellas': `${verb}*` 
@@ -616,12 +769,11 @@
                     return; 
                 }
             } else {
-                // Generate and store full conjugation for regular verbs
                 verbData.conjugations = generateConjugation(verb, type);
             }
             
             customVerbs.push(verbData);
-            saveCustomData(); // Save to localStorage
+            saveCustomData(); 
             
             updateVerbGrid();
             updateCustomVerbsDisplay();
@@ -634,7 +786,6 @@
 
         function addNewNoun() {
             const nounInput = document.getElementById('newNoun');
-            
             const noun = nounInput.value.trim().toLowerCase();
             
             if (!noun) {
@@ -648,7 +799,7 @@
             }
             
             customNouns.push(noun);
-            saveCustomData(); // Save to localStorage
+            saveCustomData(); 
             
             updateObjectGrid();
             updateCustomNounsDisplay();
@@ -656,6 +807,48 @@
             nounInput.value = '';
             
             alert(`¡Sustantivo "${noun}" añadido correctamente!`);
+        }
+        
+        function addNewPreposition() { // NEW
+            const prepositionInput = document.getElementById('newPreposition');
+            const preposition = prepositionInput.value.trim().toLowerCase();
+
+            if (!preposition) {
+                alert('Por favor, introduce una preposición.');
+                return;
+            }
+            if (defaultPrepositions.includes(preposition) || customPrepositions.includes(preposition)) {
+                alert('Esta preposición ya existe.');
+                return;
+            }
+            
+            customPrepositions.push(preposition);
+            saveCustomData();
+            updatePrepositionGrid();
+            updateCustomPrepositionsDisplay();
+            prepositionInput.value = '';
+            alert(`¡Preposición "${preposition}" añadida correctamente!`);
+        }
+
+        function addNewConnector() { // NEW
+            const connectorInput = document.getElementById('newConnector');
+            const connector = connectorInput.value.trim().toLowerCase();
+
+            if (!connector) {
+                alert('Por favor, introduce un conector.');
+                return;
+            }
+            if (defaultConnectors.includes(connector) || customConnectors.includes(connector)) {
+                alert('Este conector ya existe.');
+                return;
+            }
+            
+            customConnectors.push(connector);
+            saveCustomData();
+            updateConnectorGrid();
+            updateCustomConnectorsDisplay();
+            connectorInput.value = '';
+            alert(`¡Conector "${connector}" añadido correctamente!`);
         }
 
         function updateCustomVerbsDisplay() {
@@ -667,7 +860,6 @@
             customVerbs.forEach((verbData, index) => {
                 const tag = document.createElement('span');
                 tag.className = 'custom-verb-tag';
-                // Display type for custom verbs
                 tag.innerHTML = `${verbData.verb} (${verbData.type}) <span class="remove-verb" onclick="removeCustomVerb(${index})">×</span>`;
                 container.appendChild(tag);
             });
@@ -687,15 +879,38 @@
             });
         }
 
+        function updateCustomPrepositionsDisplay() { // NEW
+            const container = document.getElementById('customPrepositions');
+            while (container.children.length > 1) {
+                container.removeChild(container.lastChild);
+            }
+            customPrepositions.forEach((preposition, index) => {
+                const tag = document.createElement('span');
+                tag.className = 'custom-preposition-tag';
+                tag.innerHTML = `${preposition} <span class="remove-preposition" onclick="removeCustomPreposition(${index})">×</span>`;
+                container.appendChild(tag);
+            });
+        }
+
+        function updateCustomConnectorsDisplay() { // NEW
+            const container = document.getElementById('customConnectors');
+            while (container.children.length > 1) {
+                container.removeChild(container.lastChild);
+            }
+            customConnectors.forEach((connector, index) => {
+                const tag = document.createElement('span');
+                tag.className = 'custom-connector-tag';
+                tag.innerHTML = `${connector} <span class="remove-connector" onclick="removeCustomConnector(${index})">×</span>`;
+                container.appendChild(tag);
+            });
+        }
+
         function removeCustomVerb(index) {
             const verbData = customVerbs[index];
-            
             customVerbs.splice(index, 1);
-            saveCustomData(); // Save to localStorage
-            
+            saveCustomData(); 
             updateVerbGrid();
             updateCustomVerbsDisplay();
-            
             if (selectedVerb === verbData.verb) {
                 selectedVerb = null;
                 updateSentence();
@@ -704,15 +919,36 @@
 
         function removeCustomNoun(index) {
             const noun = customNouns[index];
-            
             customNouns.splice(index, 1);
-            saveCustomData(); // Save to localStorage
-            
+            saveCustomData(); 
             updateObjectGrid();
             updateCustomNounsDisplay();
-            
             if (selectedObject === noun) {
                 selectedObject = null;
+                updateSentence();
+            }
+        }
+
+        function removeCustomPreposition(index) { // NEW
+            const preposition = customPrepositions[index];
+            customPrepositions.splice(index, 1);
+            saveCustomData();
+            updatePrepositionGrid();
+            updateCustomPrepositionsDisplay();
+            if (selectedPreposition === preposition) {
+                selectedPreposition = null;
+                updateSentence();
+            }
+        }
+
+        function removeCustomConnector(index) { // NEW
+            const connector = customConnectors[index];
+            customConnectors.splice(index, 1);
+            saveCustomData();
+            updateConnectorGrid();
+            updateCustomConnectorsDisplay();
+            if (selectedConnector === connector) {
+                selectedConnector = null;
                 updateSentence();
             }
         }
@@ -722,7 +958,7 @@
             const info = document.getElementById('conjugationInfo');
             const details = document.getElementById('conjugationDetails');
             
-            if (!selectedSubject && !selectedVerb && !selectedObject) {
+            if (!selectedSubject && !selectedVerb && !selectedObject && !selectedPreposition && !selectedConnector) { // Updated condition
                 builder.innerHTML = '<span class="placeholder">Selecciona las palabras para construir tu oración...</span>';
                 info.style.display = 'none';
                 return;
@@ -730,10 +966,12 @@
 
             let sentenceHTML = '';
             
+            // Subject
             if (selectedSubject) {
                 sentenceHTML += `<span class="sentence-part selected-subject">${selectedSubject}</span>`;
             }
             
+            // Verb (conjugated)
             if (selectedVerb && selectedSubject) {
                 const verbEntry = customVerbs.find(v => v.verb === selectedVerb) || allVerbsData[selectedVerb];
 
@@ -759,9 +997,27 @@
                 info.style.display = 'none';
             }
             
+            // Preposition (NEW: inserted between verb and object, if both are present)
+            if (selectedPreposition && selectedVerb && selectedObject) { // Preposition makes most sense with both a verb and an object
+                 sentenceHTML += `<span class="sentence-part selected-preposition">${selectedPreposition}</span>`;
+            } else if (selectedPreposition && (!selectedVerb || !selectedObject)) {
+                // If only preposition is selected, or verb but no object, display it loosely
+                sentenceHTML += `<span class="sentence-part selected-preposition">${selectedPreposition}</span>`;
+            }
+
+
+            // Object
             if (selectedObject) {
                 sentenceHTML += `<span class="sentence-part selected-object">${selectedObject}</span>`;
             }
+
+            // Connector (NEW: inserted after the object, or after verb if no object)
+            if (selectedConnector && (selectedObject || selectedVerb)) { // Connector makes most sense with a preceding word
+                sentenceHTML += `<span class="sentence-part selected-connector">${selectedConnector}</span>`;
+            } else if (selectedConnector) { // If only connector is selected
+                sentenceHTML += `<span class="sentence-part selected-connector">${selectedConnector}</span>`;
+            }
+
 
             if (sentenceHTML) {
                 builder.innerHTML = sentenceHTML;
@@ -774,6 +1030,8 @@
             selectedSubject = null;
             selectedVerb = null;
             selectedObject = null;
+            selectedPreposition = null; // NEW
+            selectedConnector = null;   // NEW
             updateSentence();
         }
 
@@ -781,9 +1039,13 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadCustomData(); // Load custom data FIRST
             fetchVerbsData(); // Then fetch default verbs (they merge into the display)
-            updateObjectGrid(); // Objects can be updated right away after loading custom nouns
-            updateCustomVerbsDisplay(); // Show loaded custom verbs
-            updateCustomNounsDisplay(); // Show loaded custom nouns
+            updateObjectGrid(); 
+            updatePrepositionGrid(); // NEW
+            updateConnectorGrid();   // NEW
+            updateCustomVerbsDisplay(); 
+            updateCustomNounsDisplay();
+            updateCustomPrepositionsDisplay(); // NEW
+            updateCustomConnectorsDisplay();   // NEW
         });
     </script>
 </body>
