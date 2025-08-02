@@ -311,7 +311,7 @@
                 <button class="word-button subject" onclick="selectSubject('él')">él</button>
                 <button class="word-button subject" onclick="selectSubject('ella')">ella</button>
                 <button class="word-button subject" onclick="selectSubject('nosotros')">nosotros</button>
-                <button class="word-button subject" onclick="selectSubject('vosotros')">vosotros</button>
+                <button class="word-button subject" onclick="selectSubject('ustedes')">ustedes</button>
                 <button class="word-button subject" onclick="selectSubject('ellos')">ellos</button>
                 <button class="word-button subject" onclick="selectSubject('ellas')">ellas</button>
             </div>
@@ -420,15 +420,15 @@
             const endings = {
                 'regular-ar': {
                     'yo': 'o', 'tú': 'as', 'él': 'a', 'ella': 'a',
-                    'nosotros': 'amos', 'vosotros': 'áis', 'ellos': 'an', 'ellas': 'an'
+                    'nosotros': 'amos', 'ustedes': 'áis', 'ellos': 'an', 'ellas': 'an'
                 },
                 'regular-er': {
                     'yo': 'o', 'tú': 'es', 'él': 'e', 'ella': 'e',
-                    'nosotros': 'emos', 'vosotros': 'éis', 'ellos': 'en', 'ellas': 'en'
+                    'nosotros': 'emos', 'ustedes': 'éis', 'ellos': 'en', 'ellas': 'en'
                 },
                 'regular-ir': {
                     'yo': 'o', 'tú': 'es', 'él': 'e', 'ella': 'e',
-                    'nosotros': 'imos', 'vosotros': 'ís', 'ellos': 'en', 'ellas': 'en'
+                    'nosotros': 'imos', 'ustedes': 'ís', 'ellos': 'en', 'ellas': 'en'
                 }
             };
 
@@ -440,12 +440,12 @@
             if (type === 'irregular') {
                 return {
                     'yo': `${verb}*`, 'tú': `${verb}*`, 'él': `${verb}*`, 'ella': `${verb}*`,
-                    'nosotros': `${verb}*`, 'vosotros': `${verb}*`, 'ellos': `${verb}*`, 'ellas': `${verb}*`
+                    'nosotros': `${verb}*`, 'ustedes': `${verb}*`, 'ellos': `${verb}*`, 'ellas': `${verb}*`
                 };
             }
 
             const conjugation = {};
-            const subjects = ['yo', 'tú', 'él', 'ella', 'nosotros', 'vosotros', 'ellos', 'ellas'];
+            const subjects = ['yo', 'tú', 'él', 'ella', 'nosotros', 'ustedes', 'ellos', 'ellas'];
             
             subjects.forEach(subject => {
                 conjugation[subject] = conjugateRegularVerb(verb, type, subject);
@@ -457,35 +457,35 @@
         const conjugations = {
             'hablar': {
                 'yo': 'hablo', 'tú': 'hablas', 'él': 'habla', 'ella': 'habla',
-                'nosotros': 'hablamos', 'vosotros': 'habláis', 'ellos': 'hablan', 'ellas': 'hablan'
+                'nosotros': 'hablamos', 'ustedes': 'hablan', 'ellos': 'hablan', 'ellas': 'hablan'
             },
             'comer': {
                 'yo': 'como', 'tú': 'comes', 'él': 'come', 'ella': 'come',
-                'nosotros': 'comemos', 'vosotros': 'coméis', 'ellos': 'comen', 'ellas': 'comen'
+                'nosotros': 'comemos', 'ustedes': 'comen', 'ellos': 'comen', 'ellas': 'comen'
             },
             'vivir': {
                 'yo': 'vivo', 'tú': 'vives', 'él': 'vive', 'ella': 'vive',
-                'nosotros': 'vivimos', 'vosotros': 'vivís', 'ellos': 'viven', 'ellas': 'viven'
+                'nosotros': 'vivimos', 'ustedes': 'viven', 'ellos': 'viven', 'ellas': 'viven'
             },
             'estudiar': {
                 'yo': 'estudio', 'tú': 'estudias', 'él': 'estudia', 'ella': 'estudia',
-                'nosotros': 'estudiamos', 'vosotros': 'estudiáis', 'ellos': 'estudian', 'ellas': 'estudian'
+                'nosotros': 'estudiamos', 'ustedes': 'estudian', 'ellos': 'estudian', 'ellas': 'estudian'
             },
             'trabajar': {
                 'yo': 'trabajo', 'tú': 'trabajas', 'él': 'trabaja', 'ella': 'trabaja',
-                'nosotros': 'trabajamos', 'vosotros': 'trabajáis', 'ellos': 'trabajan', 'ellas': 'trabajan'
+                'nosotros': 'trabajamos', 'ustedes': 'trabajan', 'ellos': 'trabajan', 'ellas': 'trabajan'
             },
             'beber': {
                 'yo': 'bebo', 'tú': 'bebes', 'él': 'bebe', 'ella': 'bebe',
-                'nosotros': 'bebemos', 'vosotros': 'bebéis', 'ellos': 'beben', 'ellas': 'beben'
+                'nosotros': 'bebemos', 'ustedes': 'beben', 'ellos': 'beben', 'ellas': 'beben'
             },
             'escribir': {
                 'yo': 'escribo', 'tú': 'escribes', 'él': 'escribe', 'ella': 'escribe',
-                'nosotros': 'escribimos', 'vosotros': 'escribís', 'ellos': 'escriben', 'ellas': 'escriben'
+                'nosotros': 'escribimos', 'ustedes': 'escriben', 'ellos': 'escriben', 'ellas': 'escriben'
             },
             'leer': {
                 'yo': 'leo', 'tú': 'lees', 'él': 'lee', 'ella': 'lee',
-                'nosotros': 'leemos', 'vosotros': 'leéis', 'ellos': 'leen', 'ellas': 'leen'
+                'nosotros': 'leemos', 'ustedes': 'leen', 'ellos': 'leen', 'ellas': 'leen'
             }
         };
 
