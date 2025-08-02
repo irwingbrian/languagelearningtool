@@ -115,39 +115,77 @@
             }
         }
 
-
-        .section {
-            margin-bottom: 25px; /* Slightly reduced margin for tighter packing in left panel */
+        /* Styles for collapsible sections */
+        .collapsible-section {
+            margin-bottom: 15px; /* Space between collapsible blocks */
+            border-radius: 10px;
+            overflow: hidden; /* Important for max-height transition */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
-        .section-title {
-            font-size: 1.2em;
+        .collapsible-header {
+            background: #e2e8f0;
+            padding: 12px 20px;
+            font-size: 1.1em;
             font-weight: 600;
-            margin-bottom: 15px;
-            color: #4a5568;
+            color: #2d3748;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #cbd5e0;
+            transition: background-color 0.2s ease;
+        }
+
+        .collapsible-header:hover {
+            background-color: #d8dee7;
+        }
+
+        .collapsible-header .icon {
+            font-size: 1.5em;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible-header.active .icon {
+            transform: rotate(90deg); /* Rotate for expand indication */
+        }
+
+        .collapsible-content {
+            background: white;
+            max-height: 0; /* Hidden by default */
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out; /* Smooth transition */
+            padding: 0 20px; /* No padding when collapsed */
+        }
+
+        .collapsible-content.active {
+            max-height: 500px; /* Or a sufficiently large value for content to show */
+            padding: 20px; /* Add padding when expanded */
+            /* You might need to adjust max-height if your word grids become very long */
+            /* A better approach for very dynamic content might be JS-calculated height */
         }
 
         .word-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 10px;
-            margin-bottom: 15px; /* Adjust margin */
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Adjusted minmax for more columns */
+            gap: 8px; /* Slightly reduced gap */
+            margin-bottom: 0; /* Remove bottom margin from grid, controlled by content padding */
         }
 
         .word-button {
-            padding: 12px 16px;
+            padding: 10px 14px; /* Slightly smaller padding for denser grid */
             border: none;
-            border-radius: 12px;
+            border-radius: 10px; /* Slightly smaller radius */
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px; /* Slightly smaller font */
             font-weight: 500;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08); /* Slightly smaller shadow */
         }
 
         .word-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.12);
         }
 
         .subject {
@@ -176,22 +214,20 @@
         }
 
         .sentence-builder {
-            /* Now part of .right-panel, remove dashed border and background from here */
-            border: none; /* Removed */
-            background: none; /* Removed */
-            padding: 10px; /* Adjusted padding */
+            border: none;
+            background: none;
+            padding: 10px;
             text-align: center;
-            margin: 0; /* Remove specific margins, controlled by right-panel flex */
-            min-height: 100px; /* Ensure some height even if empty */
+            margin: 0;
+            min-height: 100px;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-wrap: wrap;
             gap: 15px;
-            flex-grow: 1; /* Allows it to take available space */
+            flex-grow: 1; 
         }
 
-        /* Styles for individual draggable sentence parts */
         .sentence-part {
             padding: 12px 20px;
             border-radius: 10px;
@@ -200,7 +236,7 @@
             min-width: 80px;
             text-align: center;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            cursor: grab; /* Indicates it's draggable */
+            cursor: grab;
             display: flex;
             align-items: center;
             position: relative;
@@ -229,31 +265,11 @@
             background-color: #c53030;
         }
 
-        /* Individual part colors */
-        .sentence-part.subject-part {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .sentence-part.verb-part {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-        }
-
-        .sentence-part.noun-part { /* Updated from .selected-object */
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-        }
-        
-        .sentence-part.preposition-part {
-            background: linear-gradient(135deg, #81e6d9 0%, #319795 100%);
-            color: white;
-        }
-
-        .sentence-part.connector-part {
-            background: linear-gradient(135deg, #fbd38d 0%, #dd6b20 100%);
-            color: white;
-        }
+        .sentence-part.subject-part { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .sentence-part.verb-part { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; }
+        .sentence-part.noun-part { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; }
+        .sentence-part.preposition-part { background: linear-gradient(135deg, #81e6d9 0%, #319795 100%); color: white; }
+        .sentence-part.connector-part { background: linear-gradient(135deg, #fbd38d 0%, #dd6b20 100%); color: white; }
 
         .clear-button {
             background: linear-gradient(135deg, #fc466b 0%, #3f5efb 100%);
@@ -264,7 +280,7 @@
             cursor: pointer;
             font-size: 16px;
             font-weight: 600;
-            margin: 20px auto; /* Center in its panel */
+            margin: 20px auto;
             display: block;
             transition: all 0.3s ease;
         }
@@ -438,7 +454,7 @@
             font-weight: bold;
         }
 
-        /* Toggle buttons for sections */
+        /* Toggle buttons for sections (moved to left panel, used for add-vocab sections) */
         .toggle-vocab, .toggle-noun, .toggle-preposition, .toggle-connector {
             color: white;
             border: none;
@@ -472,55 +488,101 @@
         
         <div class="main-layout">
             <div class="left-panel">
-                <div class="section">
-                    <div class="section-title">📍 Sujeto (Subject)</div>
-                    <div class="word-grid">
-                        <button class="word-button subject" onclick="addWordToSentence('subject', 'yo')">yo</button>
-                        <button class="word-button subject" onclick="addWordToSentence('subject', 'tú')">tú</button>
-                        <button class="word-button subject" onclick="addWordToSentence('subject', 'él')">él</button>
-                        <button class="word-button subject" onclick="addWordToSentence('subject', 'ella')">ella</button>
-                        <button class="word-button subject" onclick="addWordToSentence('subject', 'nosotros')">nosotros</button>
-                        <button class="word-button subject" onclick="addWordToSentence('subject', 'ustedes')">ustedes</button>
-                        <button class="word-button subject" onclick="addWordToSentence('subject', 'ellos')">ellos</button>
-                        <button class="word-button subject" onclick="addWordToSentence('subject', 'ellas')">ellas</button>
+                <div class="collapsible-section">
+                    <div class="collapsible-header">
+                        <span>📍 Sujeto (Subject)</span>
+                        <span class="icon">►</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="word-grid">
+                            <button class="word-button subject" onclick="addWordToSentence('subject', 'yo')">yo</button>
+                            <button class="word-button subject" onclick="addWordToSentence('subject', 'tú')">tú</button>
+                            <button class="word-button subject" onclick="addWordToSentence('subject', 'él')">él</button>
+                            <button class="word-button subject" onclick="addWordToSentence('subject', 'ella')">ella</button>
+                            <button class="word-button subject" onclick="addWordToSentence('subject', 'nosotros')">nosotros</button>
+                            <button class="word-button subject" onclick="addWordToSentence('subject', 'ustedes')">ustedes</button>
+                            <button class="word-button subject" onclick="addWordToSentence('subject', 'ellos')">ellos</button>
+                            <button class="word-button subject" onclick="addWordToSentence('subject', 'ellas')">ellas</button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="section">
-                    <div class="section-title">⚡ Verbo (Verb)</div>
-                    <div class="word-grid" id="verbGrid">
-                        </div>
+                <div class="collapsible-section">
+                    <div class="collapsible-header">
+                        <span>⚡ Verbo (Verb)</span>
+                        <span class="icon">►</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="word-grid" id="verbGrid">
+                            </div>
+                    </div>
                 </div>
 
-                <div class="section">
-                    <div class="section-title">🎯 Sustantivo (Noun)</div>
-                    <div class="word-grid" id="nounGrid">
-                        </div>
+                <div class="collapsible-section">
+                    <div class="collapsible-header">
+                        <span>🎯 Sustantivo (Noun)</span>
+                        <span class="icon">►</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="word-grid" id="nounGrid">
+                            </div>
+                    </div>
                 </div>
 
-                <div class="section">
-                    <div class="section-title">🔗 Preposiciones (Prepositions)</div>
-                    <div class="word-grid" id="prepositionGrid">
-                        </div>
+                <div class="collapsible-section">
+                    <div class="collapsible-header">
+                        <span>🔗 Preposiciones (Prepositions)</span>
+                        <span class="icon">►</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="word-grid" id="prepositionGrid">
+                            </div>
+                    </div>
                 </div>
 
-                <div class="section">
-                    <div class="section-title">➕ Conectores (Connectors)</div>
-                    <div class="word-grid" id="connectorGrid">
-                        </div>
+                <div class="collapsible-section">
+                    <div class="collapsible-header">
+                        <span>➕ Conectores (Connectors)</span>
+                        <span class="icon">►</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="word-grid" id="connectorGrid">
+                            </div>
+                    </div>
+                </div>
+
+                <div class="collapsible-section">
+                    <div class="collapsible-header">
+                        <span>💡 Modo (Mood)</span>
+                        <span class="icon">►</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <p style="text-align: center; color: #6a6a6a; font-style: italic; padding: 10px;">
+                            (Funcionalidad futura: elige el modo del verbo)
+                        </p>
+                    </div>
+                </div>
+
+                <div class="collapsible-section">
+                    <div class="collapsible-header">
+                        <span>⏰ Tiempo (Tense)</span>
+                        <span class="icon">►</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <p style="text-align: center; color: #6a6a6a; font-style: italic; padding: 10px;">
+                            (Funcionalidad futura: elige el tiempo verbal)
+                        </p>
+                    </div>
                 </div>
 
                 <button class="toggle-vocab" onclick="toggleVocabSection()">➕ Añadir Verbos</button>
-
                 <div class="add-vocab-section hidden" id="vocabSection">
                     <div class="add-vocab-title">🌱 Añade tus propios verbos</div>
-                    
                     <div class="vocab-form">
                         <div class="form-group">
                             <label class="form-label">Verbo (infinitivo)</label>
                             <input type="text" class="form-input" id="newVerb" placeholder="ej: caminar, correr, salir...">
                         </div>
-                        
                         <div class="form-group">
                             <label class="form-label">Tipo de verbo</label>
                             <select class="form-select" id="verbType">
@@ -530,29 +592,23 @@
                                 <option value="irregular">Irregular (necesita conjugaciones especiales)</option>
                             </select>
                         </div>
-                        
                         <button class="add-button" onclick="addNewVerb()">➕ Añadir</button>
                     </div>
-
                     <div class="custom-verbs" id="customVerbs">
                         <div style="font-weight: 600; color: #2d3748; margin-bottom: 10px;">Verbos añadidos:</div>
                     </div>
                 </div>
 
                 <button class="toggle-noun" onclick="toggleNounSection()">➕ Añadir Sustantivos</button>
-
                 <div class="add-noun-section hidden" id="nounSection">
                     <div class="add-noun-title">📚 Añade tus propios sustantivos</div>
-                    
                     <div class="noun-form">
                         <div class="form-group">
                             <label class="form-label">Sustantivo</label>
                             <input type="text" class="form-input noun-input" id="newNoun" placeholder="ej: la casa, el perro, las flores...">
                         </div>
-                        
                         <button class="add-button noun-button" onclick="addNewNoun()">➕ Añadir</button>
                     </div>
-
                     <div class="custom-nouns" id="customNouns">
                         <div style="font-weight: 600; color: #2d3748; margin-bottom: 10px;">Sustantivos añadidos:</div>
                     </div>
@@ -608,12 +664,10 @@
         let customPrepositions = []; 
         let customConnectors = [];   
 
-        const defaultNouns = ['el libro', 'la comida', 'el español', 'la música', 'el agua', 'la carta', 'el trabajo', 'la película']; // Renamed from defaultObjects
+        const defaultNouns = ['el libro', 'la comida', 'el español', 'la música', 'el agua', 'la carta', 'el trabajo', 'la película']; 
         const defaultPrepositions = ['a', 'ante', 'bajo', 'con', 'de', 'desde', 'en', 'entre', 'hacia', 'hasta', 'para', 'por', 'según', 'sin', 'sobre', 'tras']; 
         const defaultConnectors = ['y', 'o', 'pero', 'aunque', 'porque', 'si', 'cuando', 'mientras', 'entonces']; 
 
-        // !! IMPORTANT !!
-        // Replace this with the RAW URL of your verbs.json file on GitHub
         const VERBS_JSON_URL = 'https://raw.githubusercontent.com/irwingbrian/languagelearningtool/refs/heads/main/verbs.json';
 
         // --- localStorage Helper Functions ---
@@ -644,7 +698,6 @@
             } catch (e) {
                 console.error("Error loading from localStorage:", e);
                 alert("Error al cargar tus palabras personalizadas. Podrían estar corruptas.");
-                // Clear potentially bad data
                 localStorage.removeItem('customVerbs');
                 localStorage.removeItem('customNouns');
                 localStorage.removeItem('customPrepositions'); 
@@ -734,7 +787,7 @@
                 const button = document.createElement('button');
                 button.className = 'word-button verb';
                 button.textContent = verb;
-                button.onclick = () => addWordToSentence('verb', verb); // Changed to add
+                button.onclick = () => addWordToSentence('verb', verb); 
                 
                 if (customVerbs.some(v => v.verb === verb)) {
                     button.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)';
@@ -746,17 +799,17 @@
             });
         }
 
-        function updateNounGrid() { // Renamed from updateObjectGrid
-            const nounGrid = document.getElementById('nounGrid'); // Renamed ID
+        function updateNounGrid() { 
+            const nounGrid = document.getElementById('nounGrid'); 
             nounGrid.innerHTML = ''; 
             
-            const allNounsToDisplay = [...defaultNouns, ...customNouns].sort(); // Renamed defaultObjects to defaultNouns
+            const allNounsToDisplay = [...defaultNouns, ...customNouns].sort(); 
 
             allNounsToDisplay.forEach(noun => {
                 const button = document.createElement('button');
-                button.className = 'word-button noun'; // Changed class to noun
+                button.className = 'word-button noun'; 
                 button.textContent = noun;
-                button.onclick = () => addWordToSentence('noun', noun); // Changed to add
+                button.onclick = () => addWordToSentence('noun', noun); 
                 if (customNouns.includes(noun)) {
                     button.style.background = 'linear-gradient(135deg, #4299e1 0%, #3182ce 100%)';
                 }
@@ -774,7 +827,7 @@
                 const button = document.createElement('button');
                 button.className = 'word-button preposition';
                 button.textContent = preposition;
-                button.onclick = () => addWordToSentence('preposition', preposition); // Changed to add
+                button.onclick = () => addWordToSentence('preposition', preposition); 
                 if (customPrepositions.includes(preposition)) {
                     button.style.background = 'linear-gradient(135deg, #38b2ac 0%, #2c7a7b 100%)';
                 }
@@ -792,7 +845,7 @@
                 const button = document.createElement('button');
                 button.className = 'word-button connector';
                 button.textContent = connector;
-                button.onclick = () => addWordToSentence('connector', connector); // Changed to add
+                button.onclick = () => addWordToSentence('connector', connector); 
                 if (customConnectors.includes(connector)) {
                     button.style.background = 'linear-gradient(135deg, #ed8936 0%, #dd6b20 100%)';
                 }
@@ -889,7 +942,7 @@
             customNouns.push(noun);
             saveCustomData(); 
             
-            updateNounGrid(); // Changed to updateNounGrid
+            updateNounGrid(); 
             updateCustomNounsDisplay();
             
             nounInput.value = '';
@@ -999,7 +1052,6 @@
             saveCustomData(); 
             updateVerbGrid();
             updateCustomVerbsDisplay();
-            // Also remove from sentence if it was there
             sentenceElements = sentenceElements.filter(el => !(el.type === 'verb' && el.value === verbData.verb));
             updateSentence();
         }
@@ -1008,9 +1060,8 @@
             const noun = customNouns[index];
             customNouns.splice(index, 1);
             saveCustomData(); 
-            updateNounGrid(); // Changed to updateNounGrid
+            updateNounGrid(); 
             updateCustomNounsDisplay();
-            // Also remove from sentence if it was there
             sentenceElements = sentenceElements.filter(el => !(el.type === 'noun' && el.value === noun));
             updateSentence();
         }
@@ -1021,7 +1072,6 @@
             saveCustomData();
             updatePrepositionGrid();
             updateCustomPrepositionsDisplay();
-            // Also remove from sentence if it was there
             sentenceElements = sentenceElements.filter(el => !(el.type === 'preposition' && el.value === preposition));
             updateSentence();
         }
@@ -1032,7 +1082,6 @@
             saveCustomData();
             updateConnectorGrid();
             updateCustomConnectorsDisplay();
-            // Also remove from sentence if it was there
             sentenceElements = sentenceElements.filter(el => !(el.type === 'connector' && el.value === connector));
             updateSentence();
         }
@@ -1043,8 +1092,8 @@
             const info = document.getElementById('conjugationInfo');
             const details = document.getElementById('conjugationDetails');
             
-            builder.innerHTML = ''; // Clear previous content
-            info.style.display = 'none'; // Hide info by default
+            builder.innerHTML = ''; 
+            info.style.display = 'none'; 
 
             if (sentenceElements.length === 0) {
                 builder.innerHTML = '<span class="placeholder">Arrastra y suelta palabras aquí para construir tu oración...</span>';
@@ -1060,15 +1109,13 @@
                 let displayValue = element.value;
                 let className = '';
 
-                // Determine display value and class based on type
                 switch (element.type) {
                     case 'subject':
                         className = 'subject-part';
-                        lastSubject = element.value; // Keep track of the last subject for conjugation
+                        lastSubject = element.value; 
                         break;
                     case 'verb':
                         className = 'verb-part';
-                        // Attempt to conjugate if a subject precedes this verb
                         if (lastSubject) {
                             const verbEntry = customVerbs.find(v => v.verb === element.value) || allVerbsData[element.value];
                             if (verbEntry && verbEntry.conjugations && verbEntry.conjugations[lastSubject]) {
@@ -1083,10 +1130,10 @@
                                 displayValue = `${element.value} (conjugación no disponible)`;
                             }
                         } else {
-                            displayValue = `${element.value} (infinitivo)`; // No subject, show infinitive
+                            displayValue = `${element.value} (infinitivo)`; 
                         }
                         break;
-                    case 'noun': // Renamed from object
+                    case 'noun': 
                         className = 'noun-part';
                         break;
                     case 'preposition':
@@ -1100,12 +1147,11 @@
                 span.classList.add(className);
                 span.textContent = displayValue;
 
-                // Add remove button
                 const removeBtn = document.createElement('span');
                 removeBtn.classList.add('remove-sentence-part');
                 removeBtn.textContent = '×';
                 removeBtn.onclick = (event) => {
-                    event.stopPropagation(); // Prevent drag event if clicking close
+                    event.stopPropagation(); 
                     removeWordFromSentence(index);
                 };
                 span.appendChild(removeBtn);
@@ -1115,16 +1161,47 @@
         }
 
         function clearSentence() {
-            sentenceElements = []; // Clear the array
+            sentenceElements = []; 
             updateSentence();
-            document.getElementById('conjugationInfo').style.display = 'none'; // Ensure info is hidden
+            document.getElementById('conjugationInfo').style.display = 'none'; 
         }
+
+        // --- Collapsible Sections Logic ---
+        function setupCollapsibles() {
+            const headers = document.querySelectorAll('.collapsible-header');
+
+            headers.forEach(header => {
+                header.addEventListener('click', function() {
+                    const content = this.nextElementSibling;
+                    const icon = this.querySelector('.icon');
+                    
+                    // Close all other open sections
+                    headers.forEach(otherHeader => {
+                        if (otherHeader !== this && otherHeader.classList.contains('active')) {
+                            otherHeader.classList.remove('active');
+                            otherHeader.nextElementSibling.classList.remove('active');
+                            otherHeader.querySelector('.icon').style.transform = 'rotate(0deg)'; // Reset icon
+                        }
+                    });
+
+                    // Toggle current section
+                    this.classList.toggle('active');
+                    content.classList.toggle('active');
+                    if (this.classList.contains('active')) {
+                        icon.style.transform = 'rotate(90deg)';
+                    } else {
+                        icon.style.transform = 'rotate(0deg)';
+                    }
+                });
+            });
+        }
+
 
         // Initialize the grids and fetch data on load
         document.addEventListener('DOMContentLoaded', () => {
             loadCustomData(); 
             fetchVerbsData(); 
-            updateNounGrid(); // Changed to updateNounGrid
+            updateNounGrid(); 
             updatePrepositionGrid(); 
             updateConnectorGrid();   
             updateCustomVerbsDisplay(); 
@@ -1132,17 +1209,24 @@
             updateCustomPrepositionsDisplay(); 
             updateCustomConnectorsDisplay();   
 
+            setupCollapsibles(); // Initialize collapsible behavior
+
             // Initialize Sortable.js
             new Sortable(document.getElementById('sentenceBuilder'), {
                 animation: 150,
-                ghostClass: 'sortable-ghost', // Class name for the drop placeholder
+                ghostClass: 'sortable-ghost', 
                 onEnd: function (evt) {
-                    // Update the sentenceElements array after drag-and-drop
                     const [removed] = sentenceElements.splice(evt.oldIndex, 1);
                     sentenceElements.splice(evt.newIndex, 0, removed);
-                    updateSentence(); // Re-render the sentence with the new order
+                    updateSentence(); 
                 }
             });
+
+            // Optionally, open the first collapsible section by default
+            const firstHeader = document.querySelector('.collapsible-header');
+            if (firstHeader) {
+                firstHeader.click();
+            }
         });
     </script>
 </body>
