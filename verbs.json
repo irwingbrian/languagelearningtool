@@ -180,5 +180,19 @@
       "ellos": "hacen",
       "ellas": "hacen"
     }
+  },
+    "jugar": {
+        "type": "irregular",
+        "conjugations": {
+            "yo": "juego",
+            "tú": "juegas",
+            "él": "juega",
+            "ella": "juega",
+            "usted": "juega",
+            "nosotros": "jugamos",
+            "ustedes": "juegan",
+            "ellos": "juegan",
+            "ellas": "juegan"
+    }
   }
 }
