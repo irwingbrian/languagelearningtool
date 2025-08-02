@@ -311,7 +311,8 @@
                 <button class="word-button subject" onclick="selectSubject('él')">él</button>
                 <button class="word-button subject" onclick="selectSubject('ella')">ella</button>
                 <button class="word-button subject" onclick="selectSubject('nosotros')">nosotros</button>
-                <button class="word-button subject" onclick="selectSubject('ustedes')">ustedes</button> <button class="word-button subject" onclick="selectSubject('ellos')">ellos</button>
+                <button class="word-button subject" onclick="selectSubject('ustedes')">ustedes</button>
+                <button class="word-button subject" onclick="selectSubject('ellos')">ellos</button>
                 <button class="word-button subject" onclick="selectSubject('ellas')">ellas</button>
             </div>
         </div>
@@ -401,8 +402,41 @@
 
         // !! IMPORTANT !!
         // Replace this with the RAW URL of your verbs.json file on GitHub
-        const VERBS_JSON_URL = 'https://raw.githubusercontent.com/irwingbrian/languagelearningtool/refs/heads/main/verbs.json';
+        const VERBS_JSON_URL = 'https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO_NAME/main/verbs.json';
         // Example: 'https://raw.githubusercontent.com/Gemini-AI/spanish-tool-data/main/verbs.json';
+
+        // --- localStorage Helper Functions ---
+        function saveCustomData() {
+            try {
+                localStorage.setItem('customVerbs', JSON.stringify(customVerbs));
+                localStorage.setItem('customNouns', JSON.stringify(customNouns));
+            } catch (e) {
+                console.error("Error saving to localStorage:", e);
+                alert("Error al guardar tus palabras personalizadas. El almacenamiento local podría estar lleno o deshabilitado.");
+            }
+        }
+
+        function loadCustomData() {
+            try {
+                const storedVerbs = localStorage.getItem('customVerbs');
+                const storedNouns = localStorage.getItem('customNouns');
+                
+                if (storedVerbs) {
+                    customVerbs = JSON.parse(storedVerbs);
+                }
+                if (storedNouns) {
+                    customNouns = JSON.parse(storedNouns);
+                }
+            } catch (e) {
+                console.error("Error loading from localStorage:", e);
+                alert("Error al cargar tus palabras personalizadas. Podrían estar corruptas.");
+                // Clear potentially bad data
+                localStorage.removeItem('customVerbs');
+                localStorage.removeItem('customNouns');
+                customVerbs = [];
+                customNouns = [];
+            }
+        }
 
         // Function to fetch verbs data
         async function fetchVerbsData() {
@@ -416,7 +450,9 @@
                 updateVerbGrid(); 
             } catch (error) {
                 console.error("Could not fetch verbs data:", error);
-                alert("Error loading verb data. Please check the JSON URL or your internet connection.");
+                alert("Error loading verb data. Please check the JSON URL or your internet connection. Default verbs might not be available.");
+                // Optionally, fall back to some default hardcoded verbs if fetch fails
+                // For now, we'll just proceed with an empty allVerbsData if fetch fails.
             }
         }
 
@@ -426,23 +462,38 @@
             
             const endings = {
                 'regular-ar': {
-                    'yo': 'o', 'tú': 'as', 'él': 'a', 'ella': 'a', 'usted': 'a', // Added 'usted' for consistency if needed later
-                    'nosotros': 'amos', 'ustedes': 'an', 'ellos': 'an', 'ellas': 'an' // Changed 'vosotros' to 'ustedes'
+                    'yo': 'o', 'tú': 'as', 'él': 'a', 'ella': 'a', 'usted': 'a', 
+                    'nosotros': 'amos', 'ustedes': 'an', 'ellos': 'an', 'ellas': 'an' 
                 },
                 'regular-er': {
                     'yo': 'o', 'tú': 'es', 'él': 'e', 'ella': 'e', 'usted': 'e',
-                    'nosotros': 'emos', 'ustedes': 'en', 'ellos': 'en', 'ellas': 'en' // Changed 'vosotros' to 'ustedes'
+                    'nosotros': 'emos', 'ustedes': 'en', 'ellos': 'en', 'ellas': 'en' 
                 },
                 'regular-ir': {
                     'yo': 'o', 'tú': 'es', 'él': 'e', 'ella': 'e', 'usted': 'e',
-                    'nosotros': 'imos', 'ustedes': 'en', 'ellos': 'en', 'ellas': 'en' // Changed 'vosotros' to 'ustedes'
+                    'nosotros': 'imos', 'ustedes': 'en', 'ellos': 'en', 'ellas': 'en' 
                 }
             };
-
-            // For 'ustedes', the conjugation is the same as 'ellos/ellas' for regular verbs.
-            // If the subject is 'ustedes', use the 'ellos' ending, unless specifically defined.
-            // Here, we've explicitly added 'ustedes' to the endings object.
             return stem + endings[type][subject];
+        }
+
+        // This function is new or significantly modified from previous steps.
+        // It's responsible for generating the full conjugation for a regular verb
+        // based on its type (-ar, -er, -ir) and creating the structure expected
+        // by the allVerbsData object.
+        function generateConjugation(verb, type) {
+            const conjugation = {};
+            const subjects = ['yo', 'tú', 'él', 'ella', 'usted', 'nosotros', 'ustedes', 'ellos', 'ellas']; 
+            
+            subjects.forEach(subject => {
+                // 'ustedes' uses the same conjugation ending as 'ellos' and 'ellas' for regular verbs in Latin American Spanish
+                const effectiveSubject = (subject === 'ustedes' || subject === 'usted') ? 'ellos' : subject; // This line might need refinement if 'usted' conjugates like 'él'/'ella'
+                // Re-evaluate how 'usted' is handled here. For regular verbs, 'usted' is 'a' for -ar, 'e' for -er/-ir.
+                // It should follow 'él'/'ella'. Let's ensure the regular conjugation uses `subject` directly.
+                conjugation[subject] = conjugateRegularVerb(verb, type, subject);
+            });
+
+            return conjugation;
         }
 
         // --- Selection Functions ---
@@ -468,10 +519,11 @@
 
             const allVerbsToDisplay = { ...allVerbsData }; 
             customVerbs.forEach(verbData => {
-                allVerbsToDisplay[verbData.verb] = { 
-                    type: verbData.type,
-                    conjugations: verbData.type === 'irregular' ? verbData.conjugations : generateConjugation(verbData.verb, verbData.type)
-                };
+                // Ensure custom regular verbs have their full conjugations generated
+                if (verbData.type !== 'irregular' && !verbData.conjugations) {
+                    verbData.conjugations = generateConjugation(verbData.verb, verbData.type);
+                }
+                allVerbsToDisplay[verbData.verb] = verbData; // Add/overwrite with custom verbs
             });
 
             const verbInfinitives = Object.keys(allVerbsToDisplay).sort();
@@ -553,7 +605,7 @@
             let verbData = { verb, type };
 
             if (type === 'irregular') {
-                const confirmation = confirm(`Has seleccionado "Irregular" para "${verb}". Necesitas añadir sus conjugaciones manualmente. ¿Deseas añadirlo como un verbo irregular genérico por ahora?`);
+                const confirmation = confirm(`Has seleccionado "Irregular" para "${verb}". Necesitas añadir sus conjugaciones manualmente. ¿Deseas añadirlo como un verbo irregular genérico por ahora? (Usará infinitivo con asterisco)`);
                 if (confirmation) {
                     // Note: For custom irregular verbs, 'ustedes' conjugation would need to be manually specified if different from 'ellos/ellas'
                     verbData.conjugations = {
@@ -564,10 +616,12 @@
                     return; 
                 }
             } else {
+                // Generate and store full conjugation for regular verbs
                 verbData.conjugations = generateConjugation(verb, type);
             }
             
             customVerbs.push(verbData);
+            saveCustomData(); // Save to localStorage
             
             updateVerbGrid();
             updateCustomVerbsDisplay();
@@ -577,25 +631,6 @@
             
             alert(`¡Verbo "${verb}" añadido correctamente!`);
         }
-        
-        // This function is new or significantly modified from previous steps.
-        // It's responsible for generating the full conjugation for a regular verb
-        // based on its type (-ar, -er, -ir) and creating the structure expected
-        // by the allVerbsData object.
-        function generateConjugation(verb, type) {
-            const conjugation = {};
-            // Updated subjects array to include 'usted' and 'ustedes'
-            const subjects = ['yo', 'tú', 'él', 'ella', 'usted', 'nosotros', 'ustedes', 'ellos', 'ellas']; 
-            
-            subjects.forEach(subject => {
-                // 'ustedes' uses the same conjugation ending as 'ellos' and 'ellas' in Latin American Spanish
-                const effectiveSubject = (subject === 'ustedes') ? 'ellos' : subject; 
-                conjugation[subject] = conjugateRegularVerb(verb, type, effectiveSubject);
-            });
-
-            return conjugation;
-        }
-
 
         function addNewNoun() {
             const nounInput = document.getElementById('newNoun');
@@ -613,6 +648,7 @@
             }
             
             customNouns.push(noun);
+            saveCustomData(); // Save to localStorage
             
             updateObjectGrid();
             updateCustomNounsDisplay();
@@ -631,6 +667,7 @@
             customVerbs.forEach((verbData, index) => {
                 const tag = document.createElement('span');
                 tag.className = 'custom-verb-tag';
+                // Display type for custom verbs
                 tag.innerHTML = `${verbData.verb} (${verbData.type}) <span class="remove-verb" onclick="removeCustomVerb(${index})">×</span>`;
                 container.appendChild(tag);
             });
@@ -654,6 +691,7 @@
             const verbData = customVerbs[index];
             
             customVerbs.splice(index, 1);
+            saveCustomData(); // Save to localStorage
             
             updateVerbGrid();
             updateCustomVerbsDisplay();
@@ -668,6 +706,7 @@
             const noun = customNouns[index];
             
             customNouns.splice(index, 1);
+            saveCustomData(); // Save to localStorage
             
             updateObjectGrid();
             updateCustomNounsDisplay();
@@ -738,11 +777,13 @@
             updateSentence();
         }
 
+        // Initialize the grids and fetch data on load
         document.addEventListener('DOMContentLoaded', () => {
-            fetchVerbsData(); 
-            updateObjectGrid();
-            updateCustomVerbsDisplay();
-            updateCustomNounsDisplay();
+            loadCustomData(); // Load custom data FIRST
+            fetchVerbsData(); // Then fetch default verbs (they merge into the display)
+            updateObjectGrid(); // Objects can be updated right away after loading custom nouns
+            updateCustomVerbsDisplay(); // Show loaded custom verbs
+            updateCustomNounsDisplay(); // Show loaded custom nouns
         });
     </script>
 </body>
