@@ -294,7 +294,7 @@
 
         <div class="section">
             <div class="section-title">⚡ Verbo (Verb)</div>
-            <div class="word-grid">
+            <div class="word-grid" id="verbGrid">
                 <button class="word-button verb" onclick="selectVerb('hablar')">hablar</button>
                 <button class="word-button verb" onclick="selectVerb('comer')">comer</button>
                 <button class="word-button verb" onclick="selectVerb('vivir')">vivir</button>
@@ -459,7 +459,7 @@
         }
 
         function updateVerbGrid() {
-            const verbGrid = document.querySelector('.section:nth-child(2) .word-grid');
+            const verbGrid = document.getElementById('verbGrid');
             
             // Clear existing verbs
             verbGrid.innerHTML = '';
