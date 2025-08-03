@@ -544,7 +544,7 @@
                         <p>
                             (Funcionalidad futura: elige el tiempo verbal)
                         </p>
-                    </div>
+                    </div
                 </div>
 
                 <div class="add-word-section">
@@ -586,16 +586,12 @@
         let customWords = {
             "noun": [],
             "adjective": [],
-            "verb": [],
-            "verb (modal)": [], // Will group with main verbs
-            "verb_phrase": [], // Will group with main verbs
+            "verb": [], // This will now hold all custom verbs, regardless of type
             "adverb": [],
             "pronoun": [],
-            "quantifier": [], // Will group with determiners
-            "proper noun": [], // Will group with nouns
+            "determiner": [], // For determiners and quantifiers
             "preposition": [],
             "conjunction": [],
-            "determiner": [], // Will group with quantifiers
             "interjection": []
         };
         
@@ -617,7 +613,22 @@
                     // Merge with default structure to ensure all categories exist
                     Object.keys(customWords).forEach(key => {
                         if (parsedWords[key]) {
-                            customWords[key] = parsedWords[key];
+                            // Ensure that loaded custom words are objects, not just strings
+                            customWords[key] = parsedWords[key].map(wordItem => {
+                                if (typeof wordItem === 'string') {
+                                    // If it's an old string format, convert to object with basic info
+                                    let partOfSpeech = key;
+                                    let type = '';
+                                    if (key === 'verb') { // Attempt to infer type for old custom verbs
+                                        if (wordItem.endsWith('ar')) type = 'regular-ar';
+                                        else if (wordItem.endsWith('er')) type = 'regular-er';
+                                        else if (wordItem.endsWith('ir')) type = 'regular-ir';
+                                        else type = 'irregular'; // Default to irregular
+                                    }
+                                    return { word: wordItem, part_of_speech: partOfSpeech, english_translation: "", type: type };
+                                }
+                                return wordItem; // Already in object format
+                            });
                         }
                     });
                 }
@@ -686,20 +697,19 @@
             // Populate groupedWords from JSON data
             allVocabularyData.forEach(item => {
                 const pos = item.part_of_speech;
-                const word = item.word;
                 const type = item.type; // For verbs
 
                 if (pos === "noun") {
-                    if (item.category === "proper_noun") { // Assuming 'category' for proper nouns
+                    if (item.category === "proper noun") { // Use 'category' for proper nouns as per JSON structure
                         groupedWords.noun.proper_noun.push(item);
                     } else {
                         groupedWords.noun.common_noun.push(item);
                     }
                 } else if (pos === "verb") {
-                    if (type) { // Use 'type' for verb classification
+                    if (type && groupedWords.verb[type]) { 
                         groupedWords.verb[type].push(item);
-                    } else { // Fallback for verbs without explicit 'type'
-                        groupedWords.verb.irregular.push(item); // Treat as irregular if no type defined in JSON
+                    } else { // Fallback for verbs without explicit 'type' or unknown type in JSON
+                        groupedWords.verb.irregular.push(item); // Treat as irregular if no valid type defined in JSON
                     }
                 } else if (pos === "verb (modal)") {
                     groupedWords.verb['verb (modal)'].push(item);
@@ -713,24 +723,21 @@
             });
 
             // Add custom words to their respective groups
-            Object.keys(customWords).forEach(type => {
-                customWords[type].forEach(word => {
-                     // Find the corresponding item from allVocabularyData if it's a known word, else create a basic object
-                    const existingItem = allVocabularyData.find(item => item.word === word);
-                    const itemToAdd = existingItem || { word: word, part_of_speech: type, english_translation: "" }; // Basic object for custom
-                    
-                    if (type === "noun") { // Custom nouns don't have proper_noun distinction currently
-                        groupedWords.noun.common_noun.push(itemToAdd);
-                    } else if (type.startsWith("verb")) { // Handle verb sub-types for custom words
-                        if (itemToAdd.type) { // If custom word already has a type (from previous save)
-                             groupedWords.verb[itemToAdd.type].push(itemToAdd);
-                        } else { // Default to irregular if no specific type on custom verb
-                             groupedWords.verb.irregular.push(itemToAdd);
+            Object.keys(customWords).forEach(typeKey => {
+                customWords[typeKey].forEach(item => { // item is already an object {word, part_of_speech, type, ...}
+                    if (typeKey === "noun") { 
+                        // Custom nouns don't have proper_noun distinction currently, add to common
+                        groupedWords.noun.common_noun.push(item);
+                    } else if (typeKey === "verb") { // Handle custom verbs based on their 'type'
+                        if (item.type && groupedWords.verb[item.type]) {
+                            groupedWords.verb[item.type].push(item);
+                        } else { // Fallback for custom verbs without a specific type
+                            groupedWords.verb.irregular.push(item);
                         }
-                    } else if (type === "quantifier" || type === "determiner") {
-                        groupedWords.determiner.push(itemToAdd);
-                    } else if (groupedWords[type]) {
-                        groupedWords[type].push(itemToAdd);
+                    } else if (typeKey === "determiner") { // Handle custom determiners/quantifiers
+                        groupedWords.determiner.push(item);
+                    } else if (groupedWords[typeKey]) {
+                        groupedWords[typeKey].push(item);
                     }
                 });
             });
@@ -753,11 +760,12 @@
             // --- Populate other categories (simpler, no nested sub-types for now) ---
             addFlatCategory(document.getElementById('adjectivesContent'), groupedWords.adjective, 'adjective-button', 'adjective');
             addFlatCategory(document.getElementById('adverbsContent'), groupedWords.adverb, 'adverb-button', 'adverb');
-            // Pronouns - apply 'ustedes' rule here
+            
+            // Pronouns - apply 'ustedes' rule here (filter out 'vosotros')
             const filteredPronouns = groupedWords.pronoun.filter(p => p.word.toLowerCase() !== 'vosotros');
             addFlatCategory(document.getElementById('pronounsContent'), filteredPronouns, 'pronoun-button', 'pronoun');
 
-            addFlatCategory(document.getElementById('determinersQuantifiersContent'), groupedWords.determiner, 'determiner-quantifier-button', 'determiner'); // Use determiner for type mapping
+            addFlatCategory(document.getElementById('determinersQuantifiersContent'), groupedWords.determiner, 'determiner-quantifier-button', 'determiner'); 
             addFlatCategory(document.getElementById('prepositionsContent'), groupedWords.preposition, 'preposition-button', 'preposition');
             addFlatCategory(document.getElementById('conjunctionsContent'), groupedWords.conjunction, 'conjunction-button', 'conjunction');
             addFlatCategory(document.getElementById('interjectionsContent'), groupedWords.interjection, 'interjection-button', 'interjection');
@@ -794,7 +802,8 @@
                 const button = document.createElement('button');
                 button.className = `word-button ${buttonClass}`;
                 button.textContent = item.word;
-                button.onclick = () => addWordToSentence(item.part_of_speech, item.word, item); // Pass full item
+                // Pass the original item object to addWordToSentence
+                button.onclick = () => addWordToSentence(item.part_of_speech, item.word, item); 
                 grid.appendChild(button);
             });
         }
@@ -810,7 +819,8 @@
                 const button = document.createElement('button');
                 button.className = `word-button ${buttonClass}`;
                 button.textContent = item.word;
-                button.onclick = () => addWordToSentence(partOfSpeechType, item.word, item); // Pass full item
+                // Pass the original item object to addWordToSentence
+                button.onclick = () => addWordToSentence(item.part_of_speech, item.word, item); 
                 grid.appendChild(button);
             });
             parentContainer.appendChild(grid);
@@ -818,26 +828,41 @@
 
         // --- Conjugation Engine ---
         function getConjugatedVerb(verbInf, subjectPronoun) {
-            const verbData = allVocabularyData.find(v => v.word === verbInf && (v.part_of_speech === 'verb' || v.part_of_speech === 'verb (modal)'));
+            // Find the verb data from allVocabularyData based on the infinitive
+            const verbData = allVocabularyData.find(v => v.word === verbInf && 
+                                                        (v.part_of_speech === 'verb' || v.part_of_speech === 'verb (modal)'));
             
-            // Adjust subject pronoun for conjugation lookup if 'ustedes' is used
+            if (!verbData) {
+                // If verb not found in main vocabulary, check custom words
+                const customVerb = customWords.verb.find(v => v.word === verbInf);
+                if (customVerb) {
+                    // If found in custom words, use its data
+                    return conjugateVerbLogic(customVerb, subjectPronoun);
+                }
+                return `${verbInf} (no encontrado)`;
+            }
+
+            return conjugateVerbLogic(verbData, subjectPronoun);
+        }
+
+        function conjugateVerbLogic(verbItem, subjectPronoun) {
             const normalizedSubject = subjectPronoun.toLowerCase();
             let conjugationSubject = normalizedSubject;
 
             // Handle 'vosotros' exclusion for Latin American Spanish
             if (normalizedSubject === 'vosotros') {
-                return `${verbInf} (No aplica para Español Latinoamericano)`; // Explicitly state non-applicability
+                return `${verbItem.word} (No aplica para Español Latinoamericano)`; 
             }
 
             // If it's an irregular verb or verb (modal) with explicit conjugations in JSON
-            if (verbData && verbData.conjugations && verbData.conjugations[conjugationSubject]) {
-                return verbData.conjugations[conjugationSubject];
+            if (verbItem.conjugations && verbItem.conjugations[conjugationSubject]) {
+                return verbItem.conjugations[conjugationSubject];
             }
 
             // If it's a regular verb, generate conjugation
-            if (verbData && verbData.type && verbData.type.startsWith('regular-')) {
-                const stem = verbInf.slice(0, -2); // Remove -ar, -er, -ir
-                const verbEnding = verbInf.slice(-2);
+            if (verbItem.type && verbItem.type.startsWith('regular-')) {
+                const stem = verbItem.word.slice(0, -2); // Remove -ar, -er, -ir
+                const verbEnding = verbItem.word.slice(-2);
 
                 const endings = {
                     'ar': {
@@ -853,24 +878,31 @@
                         'nosotros': 'imos', 'ustedes': 'en', 'ellos': 'en', 'ellas': 'en' 
                     }
                 };
-                return stem + endings[verbEnding][conjugationSubject];
+                // Ensure the subject exists in the endings map
+                if (endings[verbEnding] && endings[verbEnding][conjugationSubject]) {
+                    return stem + endings[verbEnding][conjugationSubject];
+                }
             }
             
             // Fallback if no conjugation found (e.g., verb phrase, or unhandled irregular)
-            return `${verbInf} (no conjugado)`;
+            return `${verbItem.word} (no conjugado)`;
         }
 
 
         // --- Add Word to Sentence Function (replaces select functions) ---
         function addWordToSentence(partOfSpeech, value, itemData = {}) {
-            // Ensure proper noun is stored as 'noun' for sentence elements type
-            const typeForSentence = (partOfSpeech === 'proper noun') ? 'noun' : partOfSpeech;
-            // Ensure quantifier/determiner are stored under a unified type
-            const typeForSentence2 = (typeForSentence === 'quantifier' || typeForSentence === 'determiner') ? 'determiner-quantifier' : typeForSentence;
-
+            // Determine the base type for CSS class and conjugation logic
+            let baseType = partOfSpeech;
+            if (partOfSpeech === 'proper noun') {
+                baseType = 'noun';
+            } else if (partOfSpeech === 'quantifier') {
+                baseType = 'determiner-quantifier';
+            } else if (partOfSpeech === 'verb (modal)' || partOfSpeech === 'verb_phrase') {
+                baseType = 'verb'; // Treat these as 'verb' for display/conjugation logic in sentence
+            }
 
             sentenceElements.push({ 
-                type: typeForSentence2, 
+                type: baseType, // This is for CSS class and general logic
                 value: value,
                 originalItem: itemData // Store the full item for later reference (e.g., english_translation, conjugation details)
             });
@@ -896,8 +928,6 @@
                 return;
             }
 
-            let lastPronoun = null; 
-            
             sentenceElements.forEach((element, index) => {
                 const span = document.createElement('span');
                 span.classList.add('sentence-part');
@@ -907,7 +937,7 @@
                 span.classList.add(`${element.type}-part`);
 
                 // Conjugation logic for verbs
-                if (element.type === 'verb') {
+                if (element.originalItem && (element.originalItem.part_of_speech === 'verb' || element.originalItem.part_of_speech === 'verb (modal)')) {
                     // Find the preceding pronoun in the sentence
                     let precedingPronounElement = null;
                     for (let i = index - 1; i >= 0; i--) {
@@ -922,8 +952,8 @@
                         displayValue = conjugatedVerb;
                         info.style.display = 'block';
 
-                        const verbInfo = allVocabularyData.find(v => v.word === element.value && (v.part_of_speech === 'verb' || v.part_of_speech === 'verb (modal)'));
-                        const verbTypeDisplay = (verbInfo && verbInfo.type) ? verbInfo.type : (element.originalItem.part_of_speech === 'verb (modal)' ? 'Modal' : 'Desconocido');
+                        const verbInfo = element.originalItem; // Use the stored original item
+                        const verbTypeDisplay = (verbInfo && verbInfo.type) ? verbInfo.type : (verbInfo.part_of_speech === 'verb (modal)' ? 'Modal' : 'Desconocido');
 
                         details.innerHTML = `
                             <strong>${element.value}</strong> (Tipo: ${verbTypeDisplay}) conjugado con <strong>${precedingPronounElement.value}</strong> = <strong>${conjugatedVerb}</strong>
@@ -933,8 +963,8 @@
                         displayValue = `${element.value} (infinitivo)`; 
                         info.style.display = 'none'; // Hide info if no pronoun
                     }
-                } else if (element.type === 'verb (modal)' || element.type === 'verb_phrase') {
-                    // For modal verbs and verb phrases, display as is, or with specific rule
+                } else if (element.originalItem && element.originalItem.part_of_speech === 'verb_phrase') {
+                    // For verb phrases, display as is
                     displayValue = element.value;
                     info.style.display = 'none'; // No conjugation info for these by default
                 }
@@ -970,18 +1000,19 @@
                 return;
             }
 
-            // Basic Classification Logic - more robust with JSON data
             let classifiedType = null;
-            let itemData = { word: word, english_translation: "", part_of_speech: "", type: "" }; // Basic object for custom word
+            let itemData = { word: word, english_translation: "", part_of_speech: "", type: "" }; 
 
+            // Basic Classification Logic - more robust with JSON data
             // Try to classify based on rules
             if (word.endsWith('ar') || word.endsWith('er') || word.endsWith('ir')) {
                 classifiedType = 'verb';
                 itemData.part_of_speech = 'verb';
                 itemData.type = `regular-${word.slice(-2)}`;
             } else if (word.startsWith('el ') || word.startsWith('la ') || word.startsWith('los ') || word.startsWith('las ')) {
-                classifiedType = 'noun';
-                itemData.part_of_speech = 'noun';
+                // This rule is too simplistic, as it could be a noun starting with article.
+                // For now, let's remove this auto-classification for nouns to avoid misclassification.
+                // We'll rely on user prompt for nouns or more robust regex.
             } else if (word.endsWith('mente')) {
                 classifiedType = 'adverb';
                 itemData.part_of_speech = 'adverb';
@@ -994,13 +1025,26 @@
                 if (choice) {
                     const normalizedChoice = choice.trim().toLowerCase();
                     // Validate against known part_of_speech values from customWords keys and allVocabularyData's types
-                    const validTypes = Object.keys(customWords).concat(Array.from(new Set(allVocabularyData.map(item => item.part_of_speech))));
+                    const validTypes = [
+                        "noun", "adjective", "verb", "adverb", "pronoun", 
+                        "determiner", "preposition", "conjunction", "interjection",
+                        "verb (modal)", "verb_phrase", "proper noun", "quantifier"
+                    ];
                     if (validTypes.includes(normalizedChoice)) {
                         classifiedType = normalizedChoice;
                         itemData.part_of_speech = normalizedChoice;
                         // For verbs, if user explicitly says 'verb' without type, default to 'irregular'
                         if (normalizedChoice === 'verb' && !itemData.type) {
                             itemData.type = 'irregular'; 
+                        }
+                        // For proper noun, set category
+                        if (normalizedChoice === 'proper noun') {
+                            itemData.category = 'proper noun';
+                            itemData.part_of_speech = 'noun'; // Store as noun, but with category
+                        }
+                        // For quantifier, set part_of_speech
+                        if (normalizedChoice === 'quantifier') {
+                            itemData.part_of_speech = 'quantifier';
                         }
                     } else {
                         alert(`Tipo de palabra inválido: "${choice}". Por favor, usa uno de los tipos válidos.`);
@@ -1012,10 +1056,11 @@
                 }
             }
             
-            // Map JSON part_of_speech to customWords key
+            // Map JSON part_of_speech to customWords key for storage
             let customWordsKey = classifiedType;
             if (classifiedType === 'proper noun') customWordsKey = 'noun'; // Store proper nouns under generic 'noun' custom list for simplicity
             if (classifiedType === 'verb (modal)' || classifiedType === 'verb_phrase') customWordsKey = 'verb'; // Store modal/phrases under generic 'verb' custom list
+            if (classifiedType === 'quantifier') customWordsKey = 'determiner'; // Store quantifiers under generic 'determiner' custom list
 
             // Check if the word already exists in custom words to prevent duplicates
             if (customWords[customWordsKey] && customWords[customWordsKey].some(w => w.word === word)) {
@@ -1049,20 +1094,24 @@
                 customWords[typeKey].forEach((item, index) => { // item is now an object {word, part_of_speech, ...}
                     const tag = document.createElement('span');
                     // Map generic customWordsKey back to a display part of speech for CSS class
-                    let displayClass = typeKey;
-                    if (typeKey === 'proper noun' || typeKey === 'noun') displayClass = 'noun';
-                    if (typeKey.startsWith('verb')) displayClass = 'verb';
-                    if (typeKey === 'quantifier' || typeKey === 'determiner') displayClass = 'determiner-quantifier';
+                    let displayClass = item.part_of_speech; // Use item.part_of_speech for CSS class
+                    if (displayClass === 'proper noun') displayClass = 'noun';
+                    if (displayClass === 'quantifier') displayClass = 'determiner-quantifier';
+                    if (displayClass === 'verb (modal)' || displayClass === 'verb_phrase') displayClass = 'verb';
                     
                     tag.className = `custom-tag ${displayClass}-button`; 
                     
                     let displayWord = item.word;
                     if (item.part_of_speech === 'verb' && item.type) {
                         displayWord = `${item.word} (${item.type})`;
-                    } else if (item.part_of_speech === 'verb (modal)' || item.part_of_speech === 'verb_phrase') {
-                        displayWord = `${item.word} (${item.part_of_speech.replace('verb ', '')})`;
+                    } else if (item.part_of_speech === 'verb (modal)') {
+                        displayWord = `${item.word} (modal)`;
+                    } else if (item.part_of_speech === 'verb_phrase') {
+                        displayWord = `${item.word} (frase)`;
                     } else if (item.part_of_speech === 'proper noun') {
                          displayWord = `${item.word} (propio)`;
+                    } else if (item.part_of_speech === 'quantifier') {
+                         displayWord = `${item.word} (cuantificador)`;
                     }
 
                     tag.innerHTML = `${displayWord} <span class="remove-tag" onclick="removeCustomWord('${typeKey}', ${index})">×</span>`;
